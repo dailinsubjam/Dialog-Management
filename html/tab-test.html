@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- script -->
+    <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- css -->
+    <link rel="stylesheet" href="mystyle.css">
+    <link rel="stylesheet" href="/home/dada/Graduate/js/jquery-ui.css">
+    <link rel="stylesheet" href="/home/dada/Graduate/js/style.css">
+
+</head>
+
+<body>
+
+
+    <!-- the initial page -->
+    <div class="tab">
+        <button class="tablinks" onclick="openDiv(event, 'diagram')" id="defaultOpen">Canvas</button>
+        <button class="tablinks" onclick="openDiv(event, 'intent')">Intent Registration</button>
+        <button class="tablinks" onclick="openDiv(event, 'test')">Test</button>
+    </div>
+
+
+    <!-- canvas div -->
+    <div id="diagram" class="tabcontent" style="background-color: #dae4e4;">
+    </div>
+
+
+    <!-- dialog div -->
+    <div id="dialog" title="Basic dialog">
+        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved,
+            resized and closed with the 'x' icon.</p>
+    </div>
+
+
+
+    <!-- for tab button -->
+    <script>
+        function openDiv(evt, divName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(divName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+
+
+<script>
+    $(function() {
+    $( "#dialog" ).dialog({
+      autoOpen: false,
+      show: {
+        effect: "blind",
+        duration: 1000
+      },
+      hide: {
+        effect: "explode",
+        duration: 1000
+      }
+    });
+ 
+   
+  });
+</script>
+
+    <script>
+        var $$ = go.GraphObject.make;
+        var myDiagram =
+            $$(go.Diagram, "diagram",
+                {
+                    "undoManager.isEnabled": true // enable Ctrl-Z to undo and Ctrl-Y to redo
+                });
+
+        var myModel = $$(go.Model);
+
+        // helper definitions for node templates
+        function nodeStyle() {
+            return [
+                // The Node.location comes from the "loc" property of the node data,
+                // converted by the Point.parse static method.
+                // If the Node.location is changed, it updates the "loc" property of the node data,
+                // converting back using the Point.stringify static method.
+                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                {
+                    // the Node.location is at the center of each node
+                    locationSpot: go.Spot.Center
+                }
+            ];
+        }
+
+
+        function textStyle() {
+            return {
+                font: "bold 11pt Helvetica, Arial, sans-serif",
+                stroke: "whitesmoke"
+            }
+        }
+
+
+
+        function editStart(e, obj) {
+            myDiagram.commit(function (d) {
+                // get the context menu that holds the button that was clicked
+                var contextmenu = obj.part;
+                // get the node data to which the Node is data bound
+                var nodedata = contextmenu.data;
+                $(function () {
+                    $("#dialog").dialog("open");
+                });
+            }, "Edit");
+        }
+
+
+
+
+        // start node
+        myDiagram.nodeTemplateMap.add("Start",
+            $$(go.Node, "Table", nodeStyle(),
+                $$(go.Panel, "Auto",
+                    $$(go.Shape, "Circle",
+                        { minSize: new go.Size(40, 40), fill: "#79C900", strokeWidth: 0 }),
+                    $$(go.TextBlock, "Start", textStyle(),
+                        new go.Binding("text", "type")),
+                    
+                ),
+                {
+                    contextMenu:     // define a context menu for each node
+                        $$("ContextMenu",  // that has one button
+                            $$("ContextMenuButton",
+                                $$(go.TextBlock, "Edit"),
+                                { click: editStart })
+                            // more ContextMenuButtons would go here
+                        )  // end Adornment
+                }
+
+            ));
+
+
+        // end node
+        myDiagram.nodeTemplateMap.add("End",
+            $$(go.Node, "Table", nodeStyle(),
+                $$(go.Panel, "Auto",
+                    $$(go.Shape, "Circle",
+                        { minSize: new go.Size(40, 40), fill: "#DC3C00", strokeWidth: 0 }),
+                    $$(go.TextBlock, "End", textStyle(),
+                        new go.Binding("text", "type"))
+                ),
+                {
+                    contextMenu:     // define a context menu for each node
+                        $$("ContextMenu",  // that has one button
+                            $$("ContextMenuButton",
+                                $$(go.TextBlock, "Edit"),
+                                { click: editStart })
+                            // more ContextMenuButtons would go here
+                        )  // end Adornment
+                }
+            ));
+
+
+
+        // slot node
+
+        myDiagram.nodeTemplateMap.add("Slot",
+            $$(go.Node, "Table", nodeStyle(),
+                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+                $$(go.Panel, "Auto",
+                    $$(go.Shape, "Diamond",
+                        { fill: "#00A9C9", strokeWidth: 0 },
+                        new go.Binding("figure", "figure")),
+                    $$(go.TextBlock, textStyle(),
+                        {
+                            margin: 8,
+                            maxSize: new go.Size(160, NaN),
+                            wrap: go.TextBlock.WrapFit,
+                            editable: true
+                        },
+                        new go.Binding("text", "type").makeTwoWay())
+                ),
+                {
+                    contextMenu:     // define a context menu for each node
+                        $$("ContextMenu",  // that has one button
+                            $$("ContextMenuButton",
+                                $$(go.TextBlock, "Edit"),
+                                { click: editStart })
+                            // more ContextMenuButtons would go here
+                        )  // end Adornment
+                }
+            ));
+
+        // general node
+        myDiagram.nodeTemplateMap.add("General",
+            $$(go.Node, "Table", nodeStyle(),
+                // the main object is a Panel that surrounds a TextBlock with a rectangular Shape
+                $$(go.Panel, "Auto",
+                    $$(go.Shape, "Rectangle",
+                        { fill: "#00A9C9", strokeWidth: 0 },
+                        new go.Binding("figure", "figure")),
+                    $$(go.TextBlock, textStyle(),
+                        {
+                            margin: 8,
+                            maxSize: new go.Size(160, NaN),
+                            wrap: go.TextBlock.WrapFit,
+                            editable: true
+                        },
+                        new go.Binding("text", "type").makeTwoWay())
+                ),
+                {
+                    contextMenu:     // define a context menu for each node
+                        $$("ContextMenu",  // that has one button
+                            $$("ContextMenuButton",
+                                $$(go.TextBlock, "Edit"),
+                                { click: editStart })
+                            // more ContextMenuButtons would go here
+                        )  // end Adornment
+                }
+            ));
+
+
+
+        var atomID = 0;
+        // return type node
+        function nodeType(type) {
+            return function (e, obj) {
+                e.diagram.commit(function (d) {
+                    var data = {
+                        ID: String(atomID),
+                        category: type,
+                    };
+                    atomID++;
+                    d.model.addNodeData(data);
+                    part = d.findPartForData(data);  // must be same data reference, not a new {}
+                    // set location to saved mouseDownPoint in ContextMenuTool
+                    part.location = d.toolManager.contextMenuTool.mouseDownPoint;
+                }, 'new node');
+            }
+        }
+
+        // define a context menu for the diagram's background
+        myDiagram.contextMenu =
+            $$("ContextMenu",
+                // no binding, always visible button:
+                $$("ContextMenuButton",
+                    $$(go.TextBlock, "Start"),
+                    {
+                        click: nodeType("Start")
+                    }),
+                $$("ContextMenuButton",
+                    $$(go.TextBlock, "End"),
+                    {
+                        click: nodeType("End")
+                    }),
+                $$("ContextMenuButton",
+                    $$(go.TextBlock, "General"),
+                    {
+                        click: nodeType("General")
+                    }),
+                $$("ContextMenuButton",
+                    $$(go.TextBlock, "Slot"),
+                    {
+                        click: nodeType("Slot")
+                    }),
+
+            );
+
+        // in the model data, each node is represented by a JavaScript object:
+        myModel.nodeDataArray =
+            [ // note that each node data object holds whatever properties it needs;
+                // for this app we add the "name" and "source" properties
+                { type: "Start", category: "Start" },
+                { type: "End", category: "End" },
+                { type: "Slot", category: "Slot" },
+                { type: "General", category: "General" },
+
+            ];
+
+        myDiagram.model = myModel;
+
+    </script>
+
+</body>
+
+</html>
