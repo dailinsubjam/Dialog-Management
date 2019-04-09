@@ -14,9 +14,9 @@
 </head>
 
 <body>
+    <div id="base-form">
+        <form id="atom-form" action="##" method="POST">
 
-    <form id="atom-form" action="##" method="POST">
-        <div id="base-form">
             <div class="mdui-tab mdui-tab-full-width" mdui-tab>
                 <a href="#tab1" class="mdui-ripple">System Variable</a>
                 <a href="#tab2" class="mdui-ripple">DIY Variable</a>
@@ -99,10 +99,10 @@
                 </table>
                 <input type="button" value="add" onclick="Add4(this)">
             </div>
-        </div>
-        <input type="button" value="Submit" onclick="sendData()">
-    </form>
 
+            <input type="button" value="Submit" onclick="sendData()">
+        </form>
+    </div>
     <script>
         function Del1(obj) {
             var trID = obj.parentNode.parentNode.id;
@@ -180,12 +180,25 @@
             }
             );
 
+            var tab4_Objects = [];
+            $('#tb4 tr').each(function (index, item) {
+                let $item = $(item);
+                tab4_Objects.push({
+                    Priority: $item.find("td input[name='Priority']").val(),
+                    Condition: $item.find("td input[name='Condition']").val(),
+                    NextState: $item.find("td input[name='NextState']").val(),
+                    Action: $item.find("td input[name='Action']").val(),
+                });
+            }
+            );
 
             $.ajax({
                 type: "POST",
                 dataType: "json",
                 url: "test_post/nn",
-                data: JSON.stringify(tab1_Objects) + ',' + JSON.stringify(tab2_Objects),
+                data: JSON.stringify(tab1_Objects) + ',' +
+                    JSON.stringify(tab2_Objects) + ',' +
+                    JSON.stringify(tab4_Objects),
                 success: function (result) {
                     console.log(result);
                     if (result.resultCode == 200) {

@@ -6,13 +6,15 @@
 
     <!-- script -->
     <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="/static/jquery-ui.js"></script>
+    <script src="/static/mdui.min.js"></script>
 
     <!-- css -->
-    <link rel="stylesheet" href="mystyle.css">
-    <link rel="stylesheet" href="/home/dada/Graduate/js/jquery-ui.css">
-    <link rel="stylesheet" href="/home/dada/Graduate/js/style.css">
+    <link rel="stylesheet" href="/static/mystyle.css">
+    <link rel="stylesheet" href="/static/jquery-ui.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/mdui.min.css">
 
 </head>
 
@@ -31,12 +33,6 @@
     <div id="diagram" class="tabcontent" style="background-color: #dae4e4;">
     </div>
 
-
-    <!-- dialog div -->
-    <div id="dialog" title="Basic dialog">
-        <p>This is the default dialog which is useful for displaying information. The dialog window can be moved,
-            resized and closed with the 'x' icon.</p>
-    </div>
 
 
 
@@ -60,23 +56,7 @@
     </script>
 
 
-<script>
-    $(function() {
-    $( "#dialog" ).dialog({
-      autoOpen: false,
-      show: {
-        effect: "blind",
-        duration: 1000
-      },
-      hide: {
-        effect: "explode",
-        duration: 1000
-      }
-    });
- 
-   
-  });
-</script>
+
 
     <script>
         var $$ = go.GraphObject.make;
@@ -119,9 +99,8 @@
                 var contextmenu = obj.part;
                 // get the node data to which the Node is data bound
                 var nodedata = contextmenu.data;
-                $(function () {
-                    $("#dialog").dialog("open");
-                });
+                // alert("hello");
+                document.getElementById("base-form").style.display = "block";
             }, "Edit");
         }
 
@@ -136,7 +115,7 @@
                         { minSize: new go.Size(40, 40), fill: "#79C900", strokeWidth: 0 }),
                     $$(go.TextBlock, "Start", textStyle(),
                         new go.Binding("text", "type")),
-                    
+
                 ),
                 {
                     contextMenu:     // define a context menu for each node
@@ -290,6 +269,216 @@
 
         myDiagram.model = myModel;
 
+    </script>
+
+
+
+
+    <div id="base-form" class="baseDiv" style="display:none;">
+        <form id="atom-form" action="##" method="POST">
+
+            <div class="mdui-tab mdui-tab-full-width" mdui-tab>
+                <a href="#tab1" class="mdui-ripple">System Variable</a>
+                <a href="#tab2" class="mdui-ripple">DIY Variable</a>
+                <a href="#tab3" class="mdui-ripple">DB_data</a>
+                <a href="#tab4" class="mdui-ripple">Logic</a>
+
+            </div>
+            <div id="tab1">
+                <table id="table1">
+                    <caption>Intent-Slot Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Intent</th>
+                            <th>Slot</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb">
+                        <tr id="#">
+                            <td><input type="text" name="Intent" /></td>
+                            <td><input type="text" name="Slot" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del1(this)"></td>
+
+                        </tr>
+                    </tbody>
+
+
+                </table>
+                <input type="button" value="add" onclick="Add1(this)">
+            </div>
+            <div id="tab2">
+                <table id="table2">
+                    <caption>DIY Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Value</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tb2">
+                        <tr id="##">
+                            <td><input type="text" name="Variable" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del2(this)"></td>
+
+                        </tr>
+                    </tbody>
+
+
+                </table>
+                <input type="button" value="add" onclick="Add2(this)">
+            </div>
+            <div id="tab3">test3</div>
+            <div id="tab4">
+                <table id="table4">
+                    <caption>Logic Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Condition</th>
+                            <th>NextState</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tb4">
+                        <tr id="####">
+                            <td><input type="text" name="Priority" /></td>
+                            <td><input type="text" name="Condition" /></td>
+                            <td><input type="text" name="NextState" /></td>
+                            <td><input type="text" name="Action" /></td>
+                            <td><input type="button" value="delete" onclick="Del4(this)"></td>
+
+                        </tr>
+                    </tbody>
+
+
+                </table>
+                <input type="button" value="add" onclick="Add4(this)">
+            </div>
+
+            <input type="button" value="Submit" onclick="sendData()">
+        </form>
+    </div>
+
+
+
+
+
+
+
+    <script>
+        function Del1(obj) {
+            var trID = obj.parentNode.parentNode.id;
+            var trObj = document.getElementById(trID);
+            document.getElementById("tb").removeChild(trObj);
+        }
+
+
+        function Add1() {
+            var tbObj = document.getElementById("tb");
+            var trObj = document.createElement("tr");
+            trObj.id = new Date().getTime();
+            trObj.innerHTML = '<td><input type="text" name="Intent"/></td>\
+                            <td><input type="text" name="Slot"/></td>\
+                            <td><input type="text" name="Value"/></td>\
+                            <td><input type="button" value="delete" onclick="Del1(this)"></td>'
+            tbObj.appendChild(trObj);
+        }
+
+        function Del2(obj) {
+            var trID = obj.parentNode.parentNode.id;
+            var trObj = document.getElementById(trID);
+            document.getElementById("tb2").removeChild(trObj);
+        }
+
+
+        function Add2() {
+            var tbObj = document.getElementById("tb2");
+            var trObj = document.createElement("tr");
+            trObj.id = new Date().getTime();
+            trObj.innerHTML = '<td><input type="text" name="Variable" /></td>\
+                            <td><input type="text" name="Value" /></td>\
+                            <td><input type="button" value="delete" onclick="Del2(this)"></td>'
+            tbObj.appendChild(trObj);
+        }
+
+        function Del4(obj) {
+            var trID = obj.parentNode.parentNode.id;
+            var trObj = document.getElementById(trID);
+            document.getElementById("tb4").removeChild(trObj);
+        }
+
+
+        function Add4() {
+            var tbObj = document.getElementById("tb4");
+            var trObj = document.createElement("tr");
+            trObj.id = new Date().getTime();
+            trObj.innerHTML = '<td><input type="text" name="Priority" /></td>\
+                            <td><input type="text" name="Condition" /></td>\
+                            <td><input type="text" name="NextState" /></td>\
+                            <td><input type="text" name="Action" /></td>\
+                            <td><input type="button" value="delete" onclick="Del4(this)"></td>'
+            tbObj.appendChild(trObj);
+        }
+
+        function sendData() {
+            var tab1_Objects = [];
+            $('#tb tr').each(function (index, item) {
+                var $item = $(item);
+                tab1_Objects.push({
+                    Intent: $item.find("td input[name='Intent']").val(),
+                    Slot: $item.find("td input[name='Slot']").val(),
+                    Vlaue: $item.find("td input[name='Value']").val(),
+                });
+            }
+            );
+
+            var tab2_Objects = [];
+            $('#tb2 tr').each(function (index, item) {
+                let $item = $(item);
+                tab2_Objects.push({
+                    Variable: $item.find("td input[name='Variable']").val(),
+                    Value: $item.find("td input[name='Value']").val(),
+                });
+            }
+            );
+
+            var tab4_Objects = [];
+            $('#tb4 tr').each(function (index, item) {
+                let $item = $(item);
+                tab4_Objects.push({
+                    Priority: $item.find("td input[name='Priority']").val(),
+                    Condition: $item.find("td input[name='Condition']").val(),
+                    NextState: $item.find("td input[name='NextState']").val(),
+                    Action: $item.find("td input[name='Action']").val(),
+                });
+            }
+            );
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "test_post/nn",
+                data: JSON.stringify(tab1_Objects) + ',' +
+                    JSON.stringify(tab2_Objects) + ',' +
+                    JSON.stringify(tab4_Objects),
+                success: function (result) {
+                    console.log(result);
+                    if (result.resultCode == 200) {
+                        alert("SUCCESS");
+                    }
+                    ;
+                },
+                error: function () {
+                    alert("异常！");
+                }
+            });
+            document.getElementById('base-form').style.display = 'none';
+        }
     </script>
 
 </body>
