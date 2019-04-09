@@ -66,7 +66,16 @@
                     "undoManager.isEnabled": true // enable Ctrl-Z to undo and Ctrl-Y to redo
                 });
 
-        var myModel = $$(go.Model);
+        var myModel = $$(go.GraphLinksModel);
+
+
+        myDiagram.linkTemplate =
+            $$(go.Link,
+                { routing: go.Link.AvoidsNodes,
+                    curve: go.Link.Bezier },  // link route should avoid nodes
+                $$(go.Shape),
+                $$(go.Shape, { toArrow: "Standard" })
+            );
 
         // helper definitions for node templates
         function nodeStyle() {
@@ -99,7 +108,8 @@
                 var contextmenu = obj.part;
                 // get the node data to which the Node is data bound
                 var nodedata = contextmenu.data;
-                // alert("hello");
+                curNode = nodedata.key;
+                // alert(curNode);
                 document.getElementById("base-form").style.display = "block";
             }, "Edit");
         }
@@ -113,8 +123,13 @@
                 $$(go.Panel, "Auto",
                     $$(go.Shape, "Circle",
                         { minSize: new go.Size(40, 40), fill: "#79C900", strokeWidth: 0 }),
-                    $$(go.TextBlock, "Start", textStyle(),
-                        new go.Binding("text", "type")),
+                    $$(go.Panel, "Vertical",
+                        $$(go.TextBlock, "Start", textStyle(),
+                            new go.Binding("text", "type")),
+                        $$(go.TextBlock, "0", textStyle(),
+                            new go.Binding("text", "ID")),
+                    ),
+
 
                 ),
                 {
@@ -136,8 +151,12 @@
                 $$(go.Panel, "Auto",
                     $$(go.Shape, "Circle",
                         { minSize: new go.Size(40, 40), fill: "#DC3C00", strokeWidth: 0 }),
-                    $$(go.TextBlock, "End", textStyle(),
-                        new go.Binding("text", "type"))
+                    $$(go.Panel, "Vertical",
+                        $$(go.TextBlock, "End", textStyle(),
+                            new go.Binding("text", "type")),
+                        $$(go.TextBlock, "0", textStyle(),
+                            new go.Binding("text", "ID")),
+                    ),
                 ),
                 {
                     contextMenu:     // define a context menu for each node
@@ -161,14 +180,18 @@
                     $$(go.Shape, "Diamond",
                         { fill: "#00A9C9", strokeWidth: 0 },
                         new go.Binding("figure", "figure")),
-                    $$(go.TextBlock, textStyle(),
-                        {
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: true
-                        },
-                        new go.Binding("text", "type").makeTwoWay())
+                    $$(go.Panel, "Vertical",
+                        $$(go.TextBlock, "Slot", textStyle(),
+                            {
+                                margin: 8,
+                                maxSize: new go.Size(160, NaN),
+                                wrap: go.TextBlock.WrapFit,
+                                editable: true
+                            },
+                            new go.Binding("text", "type").makeTwoWay()),
+                        $$(go.TextBlock, "0", textStyle(),
+                            new go.Binding("text", "ID")),
+                    )
                 ),
                 {
                     contextMenu:     // define a context menu for each node
@@ -189,14 +212,18 @@
                     $$(go.Shape, "Rectangle",
                         { fill: "#00A9C9", strokeWidth: 0 },
                         new go.Binding("figure", "figure")),
-                    $$(go.TextBlock, textStyle(),
-                        {
-                            margin: 8,
-                            maxSize: new go.Size(160, NaN),
-                            wrap: go.TextBlock.WrapFit,
-                            editable: true
-                        },
-                        new go.Binding("text", "type").makeTwoWay())
+                    $$(go.Panel, "Vertical",
+                        $$(go.TextBlock, "General", textStyle(),
+                            {
+                                margin: 8,
+                                maxSize: new go.Size(160, NaN),
+                                wrap: go.TextBlock.WrapFit,
+                                editable: true
+                            },
+                            new go.Binding("text", "type").makeTwoWay()),
+                        $$(go.TextBlock, "0", textStyle(),
+                            new go.Binding("text", "ID")),
+                    )
                 ),
                 {
                     contextMenu:     // define a context menu for each node
@@ -211,13 +238,14 @@
 
 
 
-        var atomID = 0;
+        var atomID = 4;
         // return type node
         function nodeType(type) {
             return function (e, obj) {
                 e.diagram.commit(function (d) {
                     var data = {
-                        ID: String(atomID),
+                        key: String(atomID),
+                        ID: "ID:" + String(atomID),
                         category: type,
                     };
                     atomID++;
@@ -255,17 +283,19 @@
                     }),
 
             );
-
+        var curNode;
         // in the model data, each node is represented by a JavaScript object:
         myModel.nodeDataArray =
             [ // note that each node data object holds whatever properties it needs;
                 // for this app we add the "name" and "source" properties
-                { type: "Start", category: "Start" },
-                { type: "End", category: "End" },
-                { type: "Slot", category: "Slot" },
-                { type: "General", category: "General" },
+                { key: "0", ID: "ID:0", type: "Start", category: "Start" },
+                { key: "1", ID: "ID:1", type: "End", category: "End" },
+                { key: "2", ID: "ID:2", type: "Slot", category: "Slot" },
+                { key: "3", ID: "ID:3", type: "General", category: "General" },
 
             ];
+
+
 
         myDiagram.model = myModel;
 
@@ -462,8 +492,8 @@
             $.ajax({
                 type: "POST",
                 dataType: "json",
-                url: "test_post/nn",
-                data: JSON.stringify(tab1_Objects) + ',' +
+                url: "main/form",
+                data: curNode + '#' + JSON.stringify(tab1_Objects) + ',' +
                     JSON.stringify(tab2_Objects) + ',' +
                     JSON.stringify(tab4_Objects),
                 success: function (result) {
@@ -478,6 +508,15 @@
                 }
             });
             document.getElementById('base-form').style.display = 'none';
+
+            tab4_Objects.forEach(function (item) {
+                let link = {
+                    "from": curNode,
+                    "to": item["NextState"],
+                };
+                myModel.addLinkData(link);
+            });
+
         }
     </script>
 

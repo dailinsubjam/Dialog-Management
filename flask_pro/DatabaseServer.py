@@ -7,19 +7,20 @@ app = Flask(__name__)
 testInfo = {}
 
 
-@app.route('/test_post/nn', methods=['GET', 'POST'])  # 路由
+@app.route('/main/form', methods=['GET', 'POST'])  # 路由
 def test_post():
     print("send successfully!")
-    print(request.form)
+    for item in request.form:
+        print(item)
+    print(111)
     testInfo['name'] = 'xiaoliao'
     testInfo['age'] = '28'
     return json.dumps(testInfo)
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
+@app.route('/main')
+def main_page():
+    return render_template('tab-test.html')
 
 @app.route('/index')
 def index():
