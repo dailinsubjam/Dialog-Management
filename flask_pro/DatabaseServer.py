@@ -30,10 +30,11 @@ def init_form():
     data = {}
     nodeID, userID = request.args.get('nodeID'), '0'
     ans = database.get_info(userID, nodeID)
-    info = json.loads(ans)
-    data['sys'] = info['sys']
-    data['diy'] = info['diy']
-    data['logic'] = info['logic']
+    if ans:
+        info = json.loads(ans)
+        data['sys'] = info['sys']
+        data['diy'] = info['diy']
+        data['logic'] = info['logic']
     return json.dumps(data)
 
 
