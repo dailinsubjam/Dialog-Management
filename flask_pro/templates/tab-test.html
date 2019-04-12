@@ -6,15 +6,15 @@
 
     <!-- script -->
     <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
-    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="/static/jquery-ui.js"></script>
-    <script src="/static/mdui.min.js"></script>
+    <script src="/static/js/jquery-1.9.1.js"></script>
+    <script src="/static/js/jquery-ui.js"></script>
+    <script src="/static/js/mdui.min.js"></script>
 
     <!-- css -->
-    <link rel="stylesheet" href="/static/mystyle.css">
-    <link rel="stylesheet" href="/static/jquery-ui.css">
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="stylesheet" href="/static/mdui.min.css">
+    <link rel="stylesheet" href="/static/css/mystyle.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/mdui.min.css">
 
 </head>
 
@@ -22,17 +22,115 @@
 
 
     <!-- the initial page -->
-    <div class="tab">
-        <button class="tablinks" onclick="openDiv(event, 'diagram')" id="defaultOpen">Canvas</button>
-        <button class="tablinks" onclick="openDiv(event, 'intent')">Intent Registration</button>
-        <button class="tablinks" onclick="openDiv(event, 'test')">Test</button>
+    <div>
+
+
+        <div class="tab">
+            <button class="tablinks" onclick="openDiv(event, 'diagram')" id="defaultOpen">Canvas</button>
+            <button class="tablinks" onclick="openDiv(event, 'intent')">Intent Registration</button>
+            <button class="tablinks" onclick="openDiv(event, 'test')">Test</button>
+        </div>
+
+
+        <!-- canvas div -->
+        <div id="diagram" class="tabcontent" style="background-color: #dae4e4;float: left;">
+        </div>
+
+        <!-- form div -->
+        <div id="base-form" class="basediv" style="display:none;">
+            <form id="atom-form" action="##" method="POST">
+
+                <div class="mdui-tab mdui-tab-full-width" mdui-tab>
+                    <a href="#tab1" class="mdui-ripple">System Variable</a>
+                    <a href="#tab2" class="mdui-ripple">DIY Variable</a>
+                    <a href="#tab3" class="mdui-ripple">DB_data</a>
+                    <a href="#tab4" class="mdui-ripple">Logic</a>
+
+                </div>
+                <div id="tab1">
+                    <table id="table1">
+                        <caption>Intent-Slot Table</caption>
+                        <thead>
+                            <tr>
+                                <th>Intent</th>
+                                <th>Slot</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb">
+                            <tr id="#">
+                                <td><input type="text" name="Intent" /></td>
+                                <td><input type="text" name="Slot" /></td>
+                                <td><input type="text" name="Value" /></td>
+                                <td><input type="button" value="delete" onclick="Del1(this)"></td>
+
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <input type="button" value="add" onclick="Add1(this)">
+                </div>
+                <div id="tab2">
+                    <table id="table2">
+                        <caption>DIY Table</caption>
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Value</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tb2">
+                            <tr id="##">
+                                <td><input type="text" name="Variable" /></td>
+                                <td><input type="text" name="Value" /></td>
+                                <td><input type="button" value="delete" onclick="Del2(this)"></td>
+
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <input type="button" value="add" onclick="Add2(this)">
+                </div>
+                <div id="tab3">test3</div>
+                <div id="tab4">
+                    <table id="table4">
+                        <caption>Logic Table</caption>
+                        <thead>
+                            <tr>
+                                <th>Priority</th>
+                                <th>Condition</th>
+                                <th>NextState</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tb4">
+                            <tr id="####">
+                                <td><input type="text" name="Priority" /></td>
+                                <td><input type="text" name="Condition" /></td>
+                                <td><input type="text" name="NextState" /></td>
+                                <td><input type="text" name="Action" /></td>
+                                <td><input type="button" value="delete" onclick="Del4(this)"></td>
+
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <input type="button" value="add" onclick="Add4(this)">
+                </div>
+
+                <input type="button" value="Submit" onclick="sendData()">
+            </form>
+        </div>
+
+
+
+
     </div>
-
-
-    <!-- canvas div -->
-    <div id="diagram" class="tabcontent" style="background-color: #dae4e4;">
-    </div>
-
 
 
 
@@ -71,8 +169,10 @@
 
         myDiagram.linkTemplate =
             $$(go.Link,
-                { routing: go.Link.AvoidsNodes,
-                    curve: go.Link.Bezier },  // link route should avoid nodes
+                {
+                    routing: go.Link.AvoidsNodes,
+                    curve: go.Link.Bezier
+                },  // link route should avoid nodes
                 $$(go.Shape),
                 $$(go.Shape, { toArrow: "Standard" })
             );
@@ -111,6 +211,78 @@
                 curNode = nodedata.key;
                 // alert(curNode);
                 document.getElementById("base-form").style.display = "block";
+
+                // send request to search on the database
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "database/search",
+                    data: {},
+                    success: function (result) {
+                        console.log(result);
+                        if (result.resultCode == 200) {
+                            alert("SUCCESS");
+                        }
+                        ;
+                    },
+                });
+
+                // get the result from the database
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "database/search",
+                    data: { "nodeID": curNode },
+                    dataType: 'json',
+                    success: function (data) {
+                        let data1 = data['sys'];
+                        let data2 = data['diy'];
+                        let data4 = data['logic'];
+
+                        let ele1 = document.getElementById('tb');
+                        let ele2 = document.getElementById('tb2');
+                        let ele4 = document.getElementById('tb4');
+
+                        ele1.innerHTML = '';
+                        ele2.innerHTML = '';
+                        ele4.innerHTML = '';
+                        for (var i = 0; i < data1.length; i++) {
+                            let trObj = document.createElement("tr");
+                            trObj.id = new Date().getTime();
+                            item = data1[i];
+                            trObj.innerHTML = '<td><input type="text" name="Intent" value="' + item['Intent'] + '"/></td>' +
+                                '<td><input type="text" name="Slot" value="' + item['Slot'] + '"/></td>' +
+                                '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
+                                '<td><input type="button" value="delete" onclick="Del1(this)"></td>';
+                            ele1.appendChild(trObj);
+                        }
+
+                        for (var i = 0; i < data2.length; i++) {
+                            let trObj = document.createElement("tr");
+                            trObj.id = new Date().getTime() + 1;
+                            item = data2[i];
+                            trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
+                                '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
+                                '<td><input type="button" value="delete" onclick="Del2(this)"></td>';
+                            ele2.appendChild(trObj);
+                        }
+
+                        for (var i = 0; i < data4.length; i++) {
+                            let trObj = document.createElement("tr");
+                            trObj.id = new Date().getTime() + 3;
+                            item = data4[i];
+                            trObj.innerHTML = '<td><input type="text" name="Priority" value="' + item['Priority'] + '"/></td>' +
+                                '<td><input type="text" name="Condition" value="' + item['Condition'] + '"/></td>' +
+                                '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
+                                '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
+                                '<td><input type="button" value="delete" onclick="Del4(this)"></td>';
+                            ele4.appendChild(trObj);
+                        }
+                    },
+                });
+
+
+
             }, "Edit");
         }
 
@@ -253,6 +425,7 @@
                     part = d.findPartForData(data);  // must be same data reference, not a new {}
                     // set location to saved mouseDownPoint in ContextMenuTool
                     part.location = d.toolManager.contextMenuTool.mouseDownPoint;
+
                 }, 'new node');
             }
         }
@@ -304,95 +477,7 @@
 
 
 
-    <div id="base-form" class="baseDiv" style="display:none;">
-        <form id="atom-form" action="##" method="POST">
 
-            <div class="mdui-tab mdui-tab-full-width" mdui-tab>
-                <a href="#tab1" class="mdui-ripple">System Variable</a>
-                <a href="#tab2" class="mdui-ripple">DIY Variable</a>
-                <a href="#tab3" class="mdui-ripple">DB_data</a>
-                <a href="#tab4" class="mdui-ripple">Logic</a>
-
-            </div>
-            <div id="tab1">
-                <table id="table1">
-                    <caption>Intent-Slot Table</caption>
-                    <thead>
-                        <tr>
-                            <th>Intent</th>
-                            <th>Slot</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tb">
-                        <tr id="#">
-                            <td><input type="text" name="Intent" /></td>
-                            <td><input type="text" name="Slot" /></td>
-                            <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" onclick="Del1(this)"></td>
-
-                        </tr>
-                    </tbody>
-
-
-                </table>
-                <input type="button" value="add" onclick="Add1(this)">
-            </div>
-            <div id="tab2">
-                <table id="table2">
-                    <caption>DIY Table</caption>
-                    <thead>
-                        <tr>
-                            <th>Variable</th>
-                            <th>Value</th>
-
-                        </tr>
-                    </thead>
-                    <tbody id="tb2">
-                        <tr id="##">
-                            <td><input type="text" name="Variable" /></td>
-                            <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" onclick="Del2(this)"></td>
-
-                        </tr>
-                    </tbody>
-
-
-                </table>
-                <input type="button" value="add" onclick="Add2(this)">
-            </div>
-            <div id="tab3">test3</div>
-            <div id="tab4">
-                <table id="table4">
-                    <caption>Logic Table</caption>
-                    <thead>
-                        <tr>
-                            <th>Priority</th>
-                            <th>Condition</th>
-                            <th>NextState</th>
-                            <th>Action</th>
-
-                        </tr>
-                    </thead>
-                    <tbody id="tb4">
-                        <tr id="####">
-                            <td><input type="text" name="Priority" /></td>
-                            <td><input type="text" name="Condition" /></td>
-                            <td><input type="text" name="NextState" /></td>
-                            <td><input type="text" name="Action" /></td>
-                            <td><input type="button" value="delete" onclick="Del4(this)"></td>
-
-                        </tr>
-                    </tbody>
-
-
-                </table>
-                <input type="button" value="add" onclick="Add4(this)">
-            </div>
-
-            <input type="button" value="Submit" onclick="sendData()">
-        </form>
-    </div>
 
 
 
@@ -462,7 +547,7 @@
                 tab1_Objects.push({
                     Intent: $item.find("td input[name='Intent']").val(),
                     Slot: $item.find("td input[name='Slot']").val(),
-                    Vlaue: $item.find("td input[name='Value']").val(),
+                    Value: $item.find("td input[name='Value']").val(),
                 });
             }
             );
@@ -493,9 +578,14 @@
                 type: "POST",
                 dataType: "json",
                 url: "main/form",
-                data: curNode + '#' + JSON.stringify(tab1_Objects) + ',' +
-                    JSON.stringify(tab2_Objects) + ',' +
-                    JSON.stringify(tab4_Objects),
+                data: {
+                    'data': JSON.stringify({
+                        'nodeID': curNode,
+                        'sys': tab1_Objects,
+                        'diy': tab2_Objects,
+                        'logic': tab4_Objects
+                    })
+                },
                 success: function (result) {
                     console.log(result);
                     if (result.resultCode == 200) {
@@ -503,9 +593,6 @@
                     }
                     ;
                 },
-                error: function () {
-                    alert("异常！");
-                }
             });
             document.getElementById('base-form').style.display = 'none';
 
