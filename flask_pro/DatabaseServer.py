@@ -8,7 +8,7 @@ app = Flask(__name__)
 testInfo = {}
 
 
-@app.route('/main/form', methods=['GET', 'POST'])  # 路由
+@app.route('/main/form', methods=['GET', 'POST'])
 def test_post():
     print("send successfully!")
     

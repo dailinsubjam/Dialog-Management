@@ -2,7 +2,7 @@ from fsm import *
 
 class LightSwitch(FiniteStateMachine):
   # Initial state.
-  initial_state = 'off'
+  # initial_state = 'off'
 
   # Possible transitions.
   transitions = [
@@ -64,6 +64,7 @@ class LightSwitch(FiniteStateMachine):
 
 # Instantiate an FSM and send it events to process.
 light_switch = LightSwitch()
-light_switch.on_message('turn on')
-light_switch.on_message('turn off')
-light_switch.on_message('break')
+f = open("input.txt", "r")
+for line in f:
+  input_line = line[:-1]
+  light_switch.on_message(input_line)
