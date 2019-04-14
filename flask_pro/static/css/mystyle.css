@@ -10,7 +10,7 @@ body {
 
 .tab {
   margin: 100px 10px 30px 140px;
-  float: left;
+  /* float: left; */
   border: 1px solid #ccc;
   background-color: #f1f1f1;
   width: 130px;
@@ -57,8 +57,3 @@ body {
   height: 700px;
 }
 
-/* style the form div*/
-
-.baseDiv  {
-  display: none;
-}
