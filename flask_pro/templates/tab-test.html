@@ -4,6 +4,17 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- script
+    <!-- <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
+    <script src="/static/js/jquery-1.9.1.js"></script>
+    <script src="/static/js/jquery-ui.js"></script>
+    <script src="/static/js/mdui.min.js"></script> -->
+
+    <!-- css -->
+    <!-- <link rel="stylesheet" href="/static/css/mystyle.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/mdui.min.css"> -->
     <!-- script -->
     <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
     <script src="/static/js/jquery-1.9.1.js"></script>
@@ -11,7 +22,7 @@
     <script src="/static/js/mdui.min.js"></script>
 
     <!-- css -->
-    <link rel="stylesheet" href="/static/css/mystyle.css">
+    <link rel="stylesheet" href="/static/css/Mystyle.css">
     <link rel="stylesheet" href="/static/css/jquery-ui.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/mdui.min.css">
@@ -22,7 +33,7 @@
 
 
     <!-- the initial page -->
-    <div>
+    <div id="initial">
 
 
         <div class="tab">
@@ -36,104 +47,126 @@
         <div id="diagram" class="tabcontent" style="background-color: #dae4e4;float: left;">
         </div>
 
-        <!-- form div -->
-        <div id="base-form" class="basediv" style="display:none;">
-            <form id="atom-form" action="##" method="POST">
+    </div>
 
-                <div class="mdui-tab mdui-tab-full-width" mdui-tab>
-                    <a href="#tab1" class="mdui-ripple">System Variable</a>
-                    <a href="#tab2" class="mdui-ripple">DIY Variable</a>
-                    <a href="#tab3" class="mdui-ripple">DB_data</a>
-                    <a href="#tab4" class="mdui-ripple">Logic</a>
+    <!-- form div -->
+    <div id="base-form" class="basediv" style="display:none;">
+        <form id="atom-form" action="##" method="POST">
 
-                </div>
-                <div id="tab1">
-                    <table id="table1">
-                        <caption>Intent-Slot Table</caption>
-                        <thead>
-                            <tr>
-                                <th>Intent</th>
-                                <th>Slot</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tb">
-                            <tr id="#">
-                                <td><input type="text" name="Intent" /></td>
-                                <td><input type="text" name="Slot" /></td>
-                                <td><input type="text" name="Value" /></td>
-                                <td><input type="button" value="delete" onclick="Del1(this)"></td>
+            <div class="mdui-tab mdui-tab-full-width" mdui-tab>
+                <a href="#tab1" class="mdui-ripple">System Variable</a>
+                <a href="#tab2" class="mdui-ripple">DIY Variable</a>
+                <a href="#tab3" class="mdui-ripple">DB_data</a>
+                <a href="#tab4" class="mdui-ripple">Logic</a>
 
-                            </tr>
-                        </tbody>
+            </div>
+            <div id="tab1">
+                <table id="table1">
+                    <caption>Intent-Slot Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Intent</th>
+                            <th>Slot</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb">
+                        <tr id="#">
+                            <td><input type="text" name="Intent" /></td>
+                            <td><input type="text" name="Slot" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del1(this)"></td>
 
-
-                    </table>
-                    <input type="button" value="add" onclick="Add1(this)">
-                </div>
-                <div id="tab2">
-                    <table id="table2">
-                        <caption>DIY Table</caption>
-                        <thead>
-                            <tr>
-                                <th>Variable</th>
-                                <th>Value</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="tb2">
-                            <tr id="##">
-                                <td><input type="text" name="Variable" /></td>
-                                <td><input type="text" name="Value" /></td>
-                                <td><input type="button" value="delete" onclick="Del2(this)"></td>
-
-                            </tr>
-                        </tbody>
+                        </tr>
+                    </tbody>
 
 
-                    </table>
-                    <input type="button" value="add" onclick="Add2(this)">
-                </div>
-                <div id="tab3">test3</div>
-                <div id="tab4">
-                    <table id="table4">
-                        <caption>Logic Table</caption>
-                        <thead>
-                            <tr>
-                                <th>Priority</th>
-                                <th>Condition</th>
-                                <th>NextState</th>
-                                <th>Action</th>
+                </table>
+                <input type="button" value="add" onclick="Add1(this)">
+            </div>
+            <div id="tab2">
+                <table id="table2">
+                    <caption>DIY Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Value</th>
 
-                            </tr>
-                        </thead>
-                        <tbody id="tb4">
-                            <tr id="####">
-                                <td><input type="text" name="Priority" /></td>
-                                <td><input type="text" name="Condition" /></td>
-                                <td><input type="text" name="NextState" /></td>
-                                <td><input type="text" name="Action" /></td>
-                                <td><input type="button" value="delete" onclick="Del4(this)"></td>
+                        </tr>
+                    </thead>
+                    <tbody id="tb2">
+                        <tr id="##">
+                            <td><input type="text" name="Variable" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del2(this)"></td>
 
-                            </tr>
-                        </tbody>
+                        </tr>
+                    </tbody>
 
 
-                    </table>
-                    <input type="button" value="add" onclick="Add4(this)">
-                </div>
+                </table>
+                <input type="button" value="add" onclick="Add2(this)">
+            </div>
+            <div id="tab3">test3</div>
+            <div id="tab4">
+                <table id="table4">
+                    <caption>Logic Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Condition</th>
+                            <th>Operation</th>
+                            <th>NextState</th>
+                            <th>Action</th>
 
-                <input type="button" value="Submit" onclick="sendData()">
-            </form>
-        </div>
+                        </tr>
+                    </thead>
+                    <tbody id="tb4">
+                        <tr id="####">
+                            <td><input type="text" name="Priority" /></td>
+                            <td><input type="text" name="Condition" /></td>
+                            <td><input type="text" name="Operation" /></td>
+                            <td><input type="text" name="NextState" /></td>
+                            <td><input type="text" name="Action" /></td>
+                            <td><input type="button" value="delete" onclick="Del4(this)"></td>
+
+                        </tr>
+                    </tbody>
 
 
+                </table>
+                <input type="button" value="add" onclick="Add4(this)">
+            </div>
 
-
+            <input type="button" value="Submit" onclick="sendData()">
+        </form>
     </div>
 
 
+<div id="popLayer"></div>
 
+    <script type="text/javascript">
+        function popBox() {
+            var popBox = document.getElementById('base-form');
+            var popLayer = document.getElementById('popLayer');
+
+            popLayer.style.width = "100%";
+            popLayer.style.height = "100%";
+
+            popLayer.style.display = "block";
+            popBox.style.display = "block";
+        }//end func popBox()
+
+        function closeBox() {
+            var popBox = document.getElementById('base-form');
+            var popLayer = document.getElementById('popLayer');
+
+            popLayer.style.display = "none";
+            popBox.style.display = "none";
+
+        }//end func closeBox()
+
+    </script>
     <!-- for tab button -->
     <script>
         function openDiv(evt, divName) {
@@ -209,9 +242,10 @@
                 // get the node data to which the Node is data bound
                 var nodedata = contextmenu.data;
                 curNode = nodedata.key;
+                curNodeType = nodedata.category;
                 // alert(curNode);
-                document.getElementById("base-form").style.display = "block";
-
+                // document.getElementById("base-form").style.display = "block";
+                popBox();
                 // send request to search on the database
                 $.ajax({
                     type: "POST",
@@ -273,6 +307,7 @@
                             item = data4[i];
                             trObj.innerHTML = '<td><input type="text" name="Priority" value="' + item['Priority'] + '"/></td>' +
                                 '<td><input type="text" name="Condition" value="' + item['Condition'] + '"/></td>' +
+                                '<td><input type="text" name="Operation" value="' + item['Operation'] + '"/></td>' +
                                 '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
                                 '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
                                 '<td><input type="button" value="delete" onclick="Del4(this)"></td>';
@@ -457,6 +492,7 @@
 
             );
         var curNode;
+        var curNodeType;
         // in the model data, each node is represented by a JavaScript object:
         myModel.nodeDataArray =
             [ // note that each node data object holds whatever properties it needs;
@@ -534,6 +570,7 @@
             trObj.id = new Date().getTime();
             trObj.innerHTML = '<td><input type="text" name="Priority" /></td>\
                             <td><input type="text" name="Condition" /></td>\
+                            <td><input type="text" name="Operation" /></td>\
                             <td><input type="text" name="NextState" /></td>\
                             <td><input type="text" name="Action" /></td>\
                             <td><input type="button" value="delete" onclick="Del4(this)"></td>'
@@ -541,6 +578,7 @@
         }
 
         function sendData() {
+            closeBox();
             var tab1_Objects = [];
             $('#tb tr').each(function (index, item) {
                 var $item = $(item);
@@ -568,6 +606,7 @@
                 tab4_Objects.push({
                     Priority: $item.find("td input[name='Priority']").val(),
                     Condition: $item.find("td input[name='Condition']").val(),
+                    Operation: $item.find("td input[name='Operation']").val(),
                     NextState: $item.find("td input[name='NextState']").val(),
                     Action: $item.find("td input[name='Action']").val(),
                 });
@@ -581,6 +620,7 @@
                 data: {
                     'data': JSON.stringify({
                         'nodeID': curNode,
+                        'nodeType': curNodeType,
                         'sys': tab1_Objects,
                         'diy': tab2_Objects,
                         'logic': tab4_Objects
