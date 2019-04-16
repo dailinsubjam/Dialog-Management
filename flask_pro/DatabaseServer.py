@@ -14,9 +14,11 @@ def form_submmit():
     nodeID = data['nodeID']
     userID = '0'
     info = dict()
+    info['Name'] = data['Name']
     info['nodeType'] = data['nodeType']
-    info['sys'] = data['sys']
-    info['diy'] = data['diy']
+    info['global'] = data['global']
+    info['local'] = data['local']
+    info['db'] = data['db']
     info['logic'] = data['logic']
     print(nodeID)
     print(json.dumps(info))
@@ -33,8 +35,10 @@ def init_form():
     ans = database.get_info(userID, nodeID)
     if ans:
         info = json.loads(ans)
-        data['sys'] = info['sys']
-        data['diy'] = info['diy']
+        data['name'] = info['Name']
+        data['global'] = info['global']
+        data['local'] = info['local']
+        data['db'] = info['db']
         data['logic'] = info['logic']
     return json.dumps(data)
 
