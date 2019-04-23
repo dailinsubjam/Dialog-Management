@@ -1,1 +1,0 @@
-{"0": {"sys": [{"Slot": "2", "Intent": "1", "Value": "3"}], "diy": [], "logic": [{"Priority": "", "Action": "", "Condition": "", "NextState": "2"}]}, "1": {"sys": [{"Slot": "0", "Intent": "", "Value": ""}], "diy": [{"Variable": "", "Value": ""}], "logic": [{"Priority": "", "Action": "", "Condition": "", "NextState": "3"}]}}

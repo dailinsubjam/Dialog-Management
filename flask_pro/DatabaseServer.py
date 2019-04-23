@@ -7,15 +7,7 @@ app = Flask(__name__)
 testInfo = {}
 
 
-<<<<<<< HEAD
-#<<<<<<< HEAD
-#@app.route('/main/form', methods=['GET', 'POST'])
-#def test_post():
-#=======
-@app.route('/main/form', methods=['POST'])
-=======
 @app.route('/main/form', methods=['POST'])  # 路由
->>>>>>> origin/master
 def form_submmit():
     data = request.form.get('data')
     data = json.loads(data)
@@ -26,15 +18,10 @@ def form_submmit():
     info['nodeType'] = data['nodeType']
     info['global'] = data['global']
     info['local'] = data['local']
-    info['db'] = data['db']
     info['logic'] = data['logic']
     print(nodeID)
     print(json.dumps(info))
     database.insert_and_update(userID, nodeID, json.dumps(info))
-<<<<<<< HEAD
-#>>>>>>> origin/master
-=======
->>>>>>> origin/master
     print("send successfully!")
 
     return "OK"
@@ -50,7 +37,6 @@ def init_form():
         data['name'] = info['Name']
         data['global'] = info['global']
         data['local'] = info['local']
-        data['db'] = info['db']
         data['logic'] = info['logic']
     return json.dumps(data)
 

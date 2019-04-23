@@ -54,16 +54,13 @@
         <form id="atom-form" action="##" method="POST">
 
             <div class="mdui-tab mdui-tab-full-width" mdui-tab>
-                <a href="#tab0" class="mdui-ripple">ID and Name</a>
+                <a href="#tab0" class="mdui-ripple">Name</a>
                 <a href="#tab1" class="mdui-ripple">Global Variable</a>
                 <a href="#tab2" class="mdui-ripple">Local Variable</a>
-                <a href="#tab3" class="mdui-ripple">DB_data</a>
                 <a href="#tab4" class="mdui-ripple">Logic</a>
 
             </div>
             <div id="tab0">
-                <label for="id">ID:</label>
-                <input type="text" id="tab0id" />
                 <label for="name">Name:</label>
                 <input type="text" id="tab0name" />
             </div>
@@ -112,29 +109,7 @@
                 </table>
                 <input type="button" value="add" onclick="Add2(this)">
             </div>
-            <div id="tab3">
-                <table id="table3">
-                    <caption>DB Variable Table</caption>
-                    <thead>
-                        <tr>
-                            <th>Variable</th>
-                            <th>Value</th>
 
-                        </tr>
-                    </thead>
-                    <tbody id="tb3">
-                        <tr id="###">
-                            <td><input type="text" name="Variable" /></td>
-                            <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" onclick="Del3(this)"></td>
-
-                        </tr>
-                    </tbody>
-
-
-                </table>
-                <input type="button" value="add" onclick="Add3(this)">
-            </div>
             <div id="tab4">
                 <table id="table4">
                     <caption>Logic Table</caption>
@@ -300,22 +275,19 @@
                     success: function (data) {
                         let data1 = data['global'];
                         let data2 = data['local'];
-                        let data3 = data['db'];
                         let data4 = data['logic'];
 
                         let ele1 = document.getElementById('tb');
                         let ele2 = document.getElementById('tb2');
-                        let ele3 = document.getElementById('tb3');
                         let ele4 = document.getElementById('tb4');
 
                         ele1.innerHTML = '';
                         ele2.innerHTML = '';
-                        ele3.innerHTML = '';
                         ele4.innerHTML = '';
-                        document.getElementById('tab0id').value = curNode;
                         if ('name' in data) {
                             document.getElementById('tab0name').value = data['name'];
                         }
+                        else document.getElementById('tab0name').value = "";
 
                         for (var i = 0; i < data1.length; i++) {
                             let trObj = document.createElement("tr");
@@ -337,15 +309,7 @@
                             ele2.appendChild(trObj);
                         }
 
-                        for (var i = 0; i < data3.length; i++) {
-                            let trObj = document.createElement("tr");
-                            trObj.id = new Date().getTime() + 2;
-                            item = data3[i];
-                            trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
-                                '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
-                                '<td><input type="button" value="delete" onclick="Del3(this)"></td>';
-                            ele3.appendChild(trObj);
-                        }
+
 
                         for (var i = 0; i < data4.length; i++) {
                             let trObj = document.createElement("tr");
@@ -501,6 +465,7 @@
                         ID: "ID:" + String(atomID),
                         category: type,
                     };
+                    linkRecord[String(atomID)] = new Array();
                     atomID++;
                     d.model.addNodeData(data);
                     part = d.findPartForData(data);  // must be same data reference, not a new {}
@@ -539,6 +504,7 @@
             );
         var curNode;
         var curNodeType;
+        var linkRecord = {};
         // in the model data, each node is represented by a JavaScript object:
         // myModel.nodeDataArray =
         //     [ // note that each node data object holds whatever properties it needs;
@@ -602,22 +568,7 @@
             tbObj.appendChild(trObj);
         }
 
-        function Del3(obj) {
-            var trID = obj.parentNode.parentNode.id;
-            var trObj = document.getElementById(trID);
-            document.getElementById("tb3").removeChild(trObj);
-        }
 
-
-        function Add3() {
-            var tbObj = document.getElementById("tb3");
-            var trObj = document.createElement("tr");
-            trObj.id = new Date().getTime();
-            trObj.innerHTML = '<td><input type="text" name="Variable" /></td>\
-                            <td><input type="text" name="Value" /></td>\
-                            <td><input type="button" value="delete" onclick="Del3(this)"></td>'
-            tbObj.appendChild(trObj);
-        }
 
         function Del4(obj) {
             var trID = obj.parentNode.parentNode.id;
@@ -641,20 +592,12 @@
 
         function sendData() {
             closeBox();
-            let curID;
+
             let curName;
-            curID = document.getElementById("tab0id").value;
+
             curName = document.getElementById("tab0name").value;
 
-            if (curID) {
 
-                var node;
-                node = myModel.findNodeDataForKey(curNode);
-                myModel.setDataProperty(node, "key", curID);
-                myModel.setDataProperty(node, "ID", "ID:" + String(curID));
-
-                curNode = curID;
-            }
             var tab1_Objects = [];
             $('#tb tr').each(function (index, item) {
                 var $item = $(item);
@@ -675,15 +618,7 @@
             }
             );
 
-            var tab3_Objects = [];
-            $('#tb3 tr').each(function (index, item) {
-                let $item = $(item);
-                tab3_Objects.push({
-                    Variable: $item.find("td input[name='Variable']").val(),
-                    Value: $item.find("td input[name='Value']").val(),
-                });
-            }
-            );
+
             var tab4_Objects = [];
             $('#tb4 tr').each(function (index, item) {
                 let $item = $(item);
@@ -708,7 +643,6 @@
                         'nodeType': curNodeType,
                         'global': tab1_Objects,
                         'local': tab2_Objects,
-                        'db': tab3_Objects,
                         'logic': tab4_Objects
                     })
                 },
@@ -732,7 +666,13 @@
                 var nodeEnd = myDiagram.findNodeForKey(link["to"]);
 
                 if (nodeEnd == null) {
-                    myModel.addLinkData(link);
+
+                    let tmp = linkRecord[link['from']].indexOf(link['to']);
+                    if (tmp == -1) {
+                        myModel.addLinkData(link);
+                        linkRecord[link['from']].push(link['to']);
+                    }
+
                 }
                 else {
                     var res;
