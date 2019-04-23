@@ -12,22 +12,22 @@
 	"type": "atom-start",
 	"logic": [
 			{
-				"condition": [{"contain": "turn on"}, {"equal": "(electricity, true)"}],
-				"operation": [{"assign": " (indicator, 'lit') "}],
-				"output": " 'The light is  ' + indicator",
+				"condition": [{"contain": "turn on"}, {"equal": "(self.electricity, True)"}],
+				"operation": [{"assign": "(self.indicator, 'lit') "}],
+				"output": " 'The light is  ' + self.indicator",
 				"nextState": "on"
 		       },
 		       {
 				"condition": [{"contain": "turn off"}],
-				"operation": [{"assign": "(indicator, 'dim') "}],
-				"output": " 'The light is  ' + indicator",
+				"operation": [{"assign": "(self.indicator, 'dim') "}],
+				"output": " 'The light is  ' + self.indicator",
 				"nextState": "off"
 		       },
 		       {
 				"condition": [{"contain": "broken"}],
-				"operation": [{"assign": "(indicator, 'broken')"},{"assign": "(electricity, false)"}],
-				"output": " 'The light is  ' + indicator",
-				"nextState": "off"
+				"operation": [{"assign": "(self.indicator, 'broken')"},{"assign": "(self.electricity, False)"}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
 		      }
 		
 	]
@@ -38,22 +38,22 @@
 	"type": "atom",
 	"logic": [
 			{
-				"condition": [{"contain": "turn on"}, {"equal": "(electricity, true)"}],
-				"operation": [{"assign": " (indicator, 'lit') "}],
-				"output": " 'The light is  ' + indicator",
+				"condition": [{"contain": "turn on"}, {"equal": "(self.electricity, True)"}],
+				"operation": [{"assign": "(self.indicator, 'lit') "}],
+				"output": " 'The light is  ' + self.indicator",
 				"nextState": "on"
 		       },
 		       {
 				"condition": [{"contain": "turn off"}],
-				"operation": [{"assign": "(indicator, 'dim') "}],
-				"output": " 'The light is  ' + indicator",
+				"operation": [{"assign": "(self.indicator, 'dim') "}],
+				"output": " 'The light is  ' + self.indicator",
 				"nextState": "off"
 		       },
 		       {
 				"condition": [{"contain": "broken"}],
-				"operation": [{"assign": "(indicator, 'broken')"},{"assign": "(electricity, false)"}],
-				"output": " 'The light is  ' + indicator",
-				"nextState": "off"
+				"operation": [{"assign": "(self.indicator, 'broken')"},{"assign": "(self.electricity, False)"}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
 		      }
 
 	]
@@ -66,20 +66,20 @@
 			{
 				"condition": [{"contain": "turn on"}],
 				"operation": [],
-				"output": " 'The light is  ' + indicator",
-				"nextState": "off"
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
 		       },
 		       {
 				"condition": [{"contain": "turn off"}],
 				"operation": [],
-				"output": " 'The light is  ' + indicator",
-				"nextState": "off"
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
 		       },
 		       {
 				"condition": [{"contain": "broken"}],
-				"operation": [{"assign": "(indicator, 'broken')"},{"assign": "(electricity, false)"}],
-				"output": " 'The light is  ' + indicator",
-				"nextState": "off"
+				"operation": [{"assign": "(self.indicator, 'broken')"},{"assign": "(self.electricity, False)"}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
 		      }
 
 	]

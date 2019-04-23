@@ -2,7 +2,7 @@ from fsm import *
 
 class LightSwitch(FiniteStateMachine):
   # Initial state.
-  # initial_state = 'off'
+  initial_state = 'off'
 
   # Possible transitions.
   transitions = [
