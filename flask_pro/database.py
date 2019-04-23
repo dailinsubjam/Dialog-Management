@@ -64,14 +64,13 @@ def make_json_file(userID):
     table_name = 'USER_' + userID
     sql = 'select * from ' + table_name
     res = c.execute(sql)
-    data = dict()
+    data = []
     for item in res:
-        data[item[0]] = json.loads(item[1])
-    print(data)
-    with open("mid_ressult.json", 'w') as f:
+        tmp = json.loads(item[1])
+        tmp["ID"] = item[0]
+        data.append(tmp)
+    with open("mid_result.json", 'w') as f:
         json.dump(data, f)
-    conn.commit()
-    conn.close()
 
 
 if __name__ == '__main__':

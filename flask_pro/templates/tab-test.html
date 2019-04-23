@@ -4,6 +4,17 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- script
+    <!-- <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
+    <script src="/static/js/jquery-1.9.1.js"></script>
+    <script src="/static/js/jquery-ui.js"></script>
+    <script src="/static/js/mdui.min.js"></script> -->
+
+    <!-- css -->
+    <!-- <link rel="stylesheet" href="/static/css/mystyle.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/mdui.min.css"> -->
     <!-- script -->
     <script src="https://unpkg.com/gojs/release/go-debug.js"></script>
     <script src="/static/js/jquery-1.9.1.js"></script>
@@ -11,7 +22,7 @@
     <script src="/static/js/mdui.min.js"></script>
 
     <!-- css -->
-    <link rel="stylesheet" href="/static/css/mystyle.css">
+    <link rel="stylesheet" href="/static/css/Mystyle.css">
     <link rel="stylesheet" href="/static/css/jquery-ui.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/mdui.min.css">
@@ -22,7 +33,7 @@
 
 
     <!-- the initial page -->
-    <div>
+    <div id="initial">
 
 
         <div class="tab">
@@ -36,104 +47,153 @@
         <div id="diagram" class="tabcontent" style="background-color: #dae4e4;float: left;">
         </div>
 
-        <!-- form div -->
-        <div id="base-form" class="basediv" style="display:none;">
-            <form id="atom-form" action="##" method="POST">
+    </div>
 
-                <div class="mdui-tab mdui-tab-full-width" mdui-tab>
-                    <a href="#tab1" class="mdui-ripple">System Variable</a>
-                    <a href="#tab2" class="mdui-ripple">DIY Variable</a>
-                    <a href="#tab3" class="mdui-ripple">DB_data</a>
-                    <a href="#tab4" class="mdui-ripple">Logic</a>
+    <!-- form div -->
+    <div id="base-form" class="basediv" style="display:none;">
+        <form id="atom-form" action="##" method="POST">
 
-                </div>
-                <div id="tab1">
-                    <table id="table1">
-                        <caption>Intent-Slot Table</caption>
-                        <thead>
-                            <tr>
-                                <th>Intent</th>
-                                <th>Slot</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tb">
-                            <tr id="#">
-                                <td><input type="text" name="Intent" /></td>
-                                <td><input type="text" name="Slot" /></td>
-                                <td><input type="text" name="Value" /></td>
-                                <td><input type="button" value="delete" onclick="Del1(this)"></td>
+            <div class="mdui-tab mdui-tab-full-width" mdui-tab>
+                <a href="#tab0" class="mdui-ripple">ID and Name</a>
+                <a href="#tab1" class="mdui-ripple">Global Variable</a>
+                <a href="#tab2" class="mdui-ripple">Local Variable</a>
+                <a href="#tab3" class="mdui-ripple">DB_data</a>
+                <a href="#tab4" class="mdui-ripple">Logic</a>
 
-                            </tr>
-                        </tbody>
+            </div>
+            <div id="tab0">
+                <label for="id">ID:</label>
+                <input type="text" id="tab0id" />
+                <label for="name">Name:</label>
+                <input type="text" id="tab0name" />
+            </div>
+            <div id="tab1">
+                <table id="table1">
+                    <caption>Global Variable Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tb">
+                        <tr id="#">
+                            <td><input type="text" name="Variable" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del1(this)"></td>
 
-
-                    </table>
-                    <input type="button" value="add" onclick="Add1(this)">
-                </div>
-                <div id="tab2">
-                    <table id="table2">
-                        <caption>DIY Table</caption>
-                        <thead>
-                            <tr>
-                                <th>Variable</th>
-                                <th>Value</th>
-
-                            </tr>
-                        </thead>
-                        <tbody id="tb2">
-                            <tr id="##">
-                                <td><input type="text" name="Variable" /></td>
-                                <td><input type="text" name="Value" /></td>
-                                <td><input type="button" value="delete" onclick="Del2(this)"></td>
-
-                            </tr>
-                        </tbody>
+                        </tr>
+                    </tbody>
 
 
-                    </table>
-                    <input type="button" value="add" onclick="Add2(this)">
-                </div>
-                <div id="tab3">test3</div>
-                <div id="tab4">
-                    <table id="table4">
-                        <caption>Logic Table</caption>
-                        <thead>
-                            <tr>
-                                <th>Priority</th>
-                                <th>Condition</th>
-                                <th>NextState</th>
-                                <th>Action</th>
+                </table>
+                <input type="button" value="add" onclick="Add1(this)">
+            </div>
+            <div id="tab2">
+                <table id="table2">
+                    <caption>Local Variable Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Value</th>
 
-                            </tr>
-                        </thead>
-                        <tbody id="tb4">
-                            <tr id="####">
-                                <td><input type="text" name="Priority" /></td>
-                                <td><input type="text" name="Condition" /></td>
-                                <td><input type="text" name="NextState" /></td>
-                                <td><input type="text" name="Action" /></td>
-                                <td><input type="button" value="delete" onclick="Del4(this)"></td>
+                        </tr>
+                    </thead>
+                    <tbody id="tb2">
+                        <tr id="##">
+                            <td><input type="text" name="Variable" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del2(this)"></td>
 
-                            </tr>
-                        </tbody>
+                        </tr>
+                    </tbody>
 
 
-                    </table>
-                    <input type="button" value="add" onclick="Add4(this)">
-                </div>
+                </table>
+                <input type="button" value="add" onclick="Add2(this)">
+            </div>
+            <div id="tab3">
+                <table id="table3">
+                    <caption>DB Variable Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Value</th>
 
-                <input type="button" value="Submit" onclick="sendData()">
-            </form>
-        </div>
+                        </tr>
+                    </thead>
+                    <tbody id="tb3">
+                        <tr id="###">
+                            <td><input type="text" name="Variable" /></td>
+                            <td><input type="text" name="Value" /></td>
+                            <td><input type="button" value="delete" onclick="Del3(this)"></td>
+
+                        </tr>
+                    </tbody>
 
 
+                </table>
+                <input type="button" value="add" onclick="Add3(this)">
+            </div>
+            <div id="tab4">
+                <table id="table4">
+                    <caption>Logic Table</caption>
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Condition</th>
+                            <th>Operation</th>
+                            <th>NextState</th>
+                            <th>Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id="tb4">
+                        <tr id="####">
+                            <td><input type="text" name="Priority" /></td>
+                            <td><input type="text" name="Condition" /></td>
+                            <td><input type="text" name="Operation" /></td>
+                            <td><input type="text" name="NextState" /></td>
+                            <td><input type="text" name="Action" /></td>
+                            <td><input type="button" value="delete" onclick="Del4(this)"></td>
+
+                        </tr>
+                    </tbody>
 
 
+                </table>
+                <input type="button" value="add" onclick="Add4(this)">
+            </div>
+
+            <input type="button" value="Submit" onclick="sendData()">
+        </form>
     </div>
 
 
+    <div id="popLayer"></div>
 
+    <script type="text/javascript">
+        function popBox() {
+            var popBox = document.getElementById('base-form');
+            var popLayer = document.getElementById('popLayer');
+
+            popLayer.style.width = "100%";
+            popLayer.style.height = "100%";
+
+            popLayer.style.display = "block";
+            popBox.style.display = "block";
+        }//end func popBox()
+
+        function closeBox() {
+            var popBox = document.getElementById('base-form');
+            var popLayer = document.getElementById('popLayer');
+
+            popLayer.style.display = "none";
+            popBox.style.display = "none";
+
+        }//end func closeBox()
+
+    </script>
     <!-- for tab button -->
     <script>
         function openDiv(evt, divName) {
@@ -161,7 +221,9 @@
         var myDiagram =
             $$(go.Diagram, "diagram",
                 {
-                    "undoManager.isEnabled": true // enable Ctrl-Z to undo and Ctrl-Y to redo
+                    "undoManager.isEnabled": true,
+                    allowRelink: false,
+
                 });
 
         var myModel = $$(go.GraphLinksModel);
@@ -209,9 +271,10 @@
                 // get the node data to which the Node is data bound
                 var nodedata = contextmenu.data;
                 curNode = nodedata.key;
+                curNodeType = nodedata.category;
                 // alert(curNode);
-                document.getElementById("base-form").style.display = "block";
-
+                // document.getElementById("base-form").style.display = "block";
+                popBox();
                 // send request to search on the database
                 $.ajax({
                     type: "POST",
@@ -235,23 +298,30 @@
                     data: { "nodeID": curNode },
                     dataType: 'json',
                     success: function (data) {
-                        let data1 = data['sys'];
-                        let data2 = data['diy'];
+                        let data1 = data['global'];
+                        let data2 = data['local'];
+                        let data3 = data['db'];
                         let data4 = data['logic'];
 
                         let ele1 = document.getElementById('tb');
                         let ele2 = document.getElementById('tb2');
+                        let ele3 = document.getElementById('tb3');
                         let ele4 = document.getElementById('tb4');
 
                         ele1.innerHTML = '';
                         ele2.innerHTML = '';
+                        ele3.innerHTML = '';
                         ele4.innerHTML = '';
+                        document.getElementById('tab0id').value = curNode;
+                        if ('name' in data) {
+                            document.getElementById('tab0name').value = data['name'];
+                        }
+
                         for (var i = 0; i < data1.length; i++) {
                             let trObj = document.createElement("tr");
                             trObj.id = new Date().getTime();
                             item = data1[i];
-                            trObj.innerHTML = '<td><input type="text" name="Intent" value="' + item['Intent'] + '"/></td>' +
-                                '<td><input type="text" name="Slot" value="' + item['Slot'] + '"/></td>' +
+                            trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
                                 '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
                                 '<td><input type="button" value="delete" onclick="Del1(this)"></td>';
                             ele1.appendChild(trObj);
@@ -267,12 +337,23 @@
                             ele2.appendChild(trObj);
                         }
 
+                        for (var i = 0; i < data3.length; i++) {
+                            let trObj = document.createElement("tr");
+                            trObj.id = new Date().getTime() + 2;
+                            item = data3[i];
+                            trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
+                                '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
+                                '<td><input type="button" value="delete" onclick="Del3(this)"></td>';
+                            ele3.appendChild(trObj);
+                        }
+
                         for (var i = 0; i < data4.length; i++) {
                             let trObj = document.createElement("tr");
                             trObj.id = new Date().getTime() + 3;
                             item = data4[i];
                             trObj.innerHTML = '<td><input type="text" name="Priority" value="' + item['Priority'] + '"/></td>' +
                                 '<td><input type="text" name="Condition" value="' + item['Condition'] + '"/></td>' +
+                                '<td><input type="text" name="Operation" value="' + item['Operation'] + '"/></td>' +
                                 '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
                                 '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
                                 '<td><input type="button" value="delete" onclick="Del4(this)"></td>';
@@ -330,15 +411,15 @@
                             new go.Binding("text", "ID")),
                     ),
                 ),
-                {
-                    contextMenu:     // define a context menu for each node
-                        $$("ContextMenu",  // that has one button
-                            $$("ContextMenuButton",
-                                $$(go.TextBlock, "Edit"),
-                                { click: editStart })
-                            // more ContextMenuButtons would go here
-                        )  // end Adornment
-                }
+                // {
+                //     contextMenu:     // define a context menu for each node
+                //         $$("ContextMenu",  // that has one button
+                //             $$("ContextMenuButton",
+                //                 $$(go.TextBlock, "Edit"),
+                //                 { click: editStart })
+                //             // more ContextMenuButtons would go here
+                //         )  // end Adornment
+                // }
             ));
 
 
@@ -410,7 +491,7 @@
 
 
 
-        var atomID = 4;
+        var atomID = 0;
         // return type node
         function nodeType(type) {
             return function (e, obj) {
@@ -457,16 +538,17 @@
 
             );
         var curNode;
+        var curNodeType;
         // in the model data, each node is represented by a JavaScript object:
-        myModel.nodeDataArray =
-            [ // note that each node data object holds whatever properties it needs;
-                // for this app we add the "name" and "source" properties
-                { key: "0", ID: "ID:0", type: "Start", category: "Start" },
-                { key: "1", ID: "ID:1", type: "End", category: "End" },
-                { key: "2", ID: "ID:2", type: "Slot", category: "Slot" },
-                { key: "3", ID: "ID:3", type: "General", category: "General" },
+        // myModel.nodeDataArray =
+        //     [ // note that each node data object holds whatever properties it needs;
+        //         // for this app we add the "name" and "source" properties
+        //         { key: "0", ID: "ID:0", type: "Start", category: "Start" },
+        //         { key: "1", ID: "ID:1", type: "End", category: "End" },
+        //         { key: "2", ID: "ID:2", type: "Slot", category: "Slot" },
+        //         { key: "3", ID: "ID:3", type: "General", category: "General" },
 
-            ];
+        //     ];
 
 
 
@@ -497,8 +579,7 @@
             var tbObj = document.getElementById("tb");
             var trObj = document.createElement("tr");
             trObj.id = new Date().getTime();
-            trObj.innerHTML = '<td><input type="text" name="Intent"/></td>\
-                            <td><input type="text" name="Slot"/></td>\
+            trObj.innerHTML = '<td><input type="text" name="Variable"/></td>\
                             <td><input type="text" name="Value"/></td>\
                             <td><input type="button" value="delete" onclick="Del1(this)"></td>'
             tbObj.appendChild(trObj);
@@ -521,6 +602,23 @@
             tbObj.appendChild(trObj);
         }
 
+        function Del3(obj) {
+            var trID = obj.parentNode.parentNode.id;
+            var trObj = document.getElementById(trID);
+            document.getElementById("tb3").removeChild(trObj);
+        }
+
+
+        function Add3() {
+            var tbObj = document.getElementById("tb3");
+            var trObj = document.createElement("tr");
+            trObj.id = new Date().getTime();
+            trObj.innerHTML = '<td><input type="text" name="Variable" /></td>\
+                            <td><input type="text" name="Value" /></td>\
+                            <td><input type="button" value="delete" onclick="Del3(this)"></td>'
+            tbObj.appendChild(trObj);
+        }
+
         function Del4(obj) {
             var trID = obj.parentNode.parentNode.id;
             var trObj = document.getElementById(trID);
@@ -534,6 +632,7 @@
             trObj.id = new Date().getTime();
             trObj.innerHTML = '<td><input type="text" name="Priority" /></td>\
                             <td><input type="text" name="Condition" /></td>\
+                            <td><input type="text" name="Operation" /></td>\
                             <td><input type="text" name="NextState" /></td>\
                             <td><input type="text" name="Action" /></td>\
                             <td><input type="button" value="delete" onclick="Del4(this)"></td>'
@@ -541,12 +640,26 @@
         }
 
         function sendData() {
+            closeBox();
+            let curID;
+            let curName;
+            curID = document.getElementById("tab0id").value;
+            curName = document.getElementById("tab0name").value;
+
+            if (curID) {
+
+                var node;
+                node = myModel.findNodeDataForKey(curNode);
+                myModel.setDataProperty(node, "key", curID);
+                myModel.setDataProperty(node, "ID", "ID:" + String(curID));
+
+                curNode = curID;
+            }
             var tab1_Objects = [];
             $('#tb tr').each(function (index, item) {
                 var $item = $(item);
                 tab1_Objects.push({
-                    Intent: $item.find("td input[name='Intent']").val(),
-                    Slot: $item.find("td input[name='Slot']").val(),
+                    Variable: $item.find("td input[name='Variable']").val(),
                     Value: $item.find("td input[name='Value']").val(),
                 });
             }
@@ -562,12 +675,22 @@
             }
             );
 
+            var tab3_Objects = [];
+            $('#tb3 tr').each(function (index, item) {
+                let $item = $(item);
+                tab3_Objects.push({
+                    Variable: $item.find("td input[name='Variable']").val(),
+                    Value: $item.find("td input[name='Value']").val(),
+                });
+            }
+            );
             var tab4_Objects = [];
             $('#tb4 tr').each(function (index, item) {
                 let $item = $(item);
                 tab4_Objects.push({
                     Priority: $item.find("td input[name='Priority']").val(),
                     Condition: $item.find("td input[name='Condition']").val(),
+                    Operation: $item.find("td input[name='Operation']").val(),
                     NextState: $item.find("td input[name='NextState']").val(),
                     Action: $item.find("td input[name='Action']").val(),
                 });
@@ -581,8 +704,11 @@
                 data: {
                     'data': JSON.stringify({
                         'nodeID': curNode,
-                        'sys': tab1_Objects,
-                        'diy': tab2_Objects,
+                        'Name': curName,
+                        'nodeType': curNodeType,
+                        'global': tab1_Objects,
+                        'local': tab2_Objects,
+                        'db': tab3_Objects,
                         'logic': tab4_Objects
                     })
                 },
@@ -601,7 +727,24 @@
                     "from": curNode,
                     "to": item["NextState"],
                 };
-                myModel.addLinkData(link);
+
+                var nodeStart = myDiagram.findNodeForKey(link["from"]);
+                var nodeEnd = myDiagram.findNodeForKey(link["to"]);
+
+                if (nodeEnd == null) {
+                    myModel.addLinkData(link);
+                }
+                else {
+                    var res;
+                    res = nodeStart.findLinksTo(nodeEnd);
+                    if (res.count == 0) {
+                        myDiagram.model.addLinkData(link);
+                    }
+                }
+                // myDiagram.startTransaction("make new link");
+                // myDiagram.model.addLinkData(link);
+                // myDiagram.commitTransaction("make new link");
+
             });
 
         }
