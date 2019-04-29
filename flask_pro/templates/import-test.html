@@ -23,7 +23,7 @@
                 </tbody>
             </table>
             <input type="button" value="add" onclick="addImportNode()">
-            
+
         </form>
         <input type="button" value="submit" onclick="subImpNode()">
     </div>
@@ -54,6 +54,8 @@
             }
             );
 
+            var atomID = 0;
+
             $.ajax({
                 type: "GET",
                 dataType: "json",
@@ -62,7 +64,26 @@
                     'data': JSON.stringify(node_Objects)
                 },
                 success: function (data) {
-                    
+
+                    data['info'].forEach((item) => {
+                        atomID = Math.max(atomID, Number(item['nodeID']));
+                        var adddata = {
+                            key: item['nodeID'],
+                            ID: "ID:" + item['nodeID'],
+                            category: item['nodeType'],
+                        };
+                        alert(1);
+                        // linkRecord[item['nodeID']] = new Array();
+
+                        // myModel.addNodeData(adddata);
+                        // part = myDiagram.findPartForData(adddata);  // must be same data reference, not a new {}
+                        // // set location to saved mouseDownPoint in ContextMenuTool
+                        // part.location = d.toolManager.contextMenuTool.mouseDownPoint;
+
+                    });
+
+                   
+
                 },
             });
         }

@@ -7,7 +7,7 @@ def create_table(userID):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         table_name = 'USER_' + userID
-        sql = "create table " + table_name + " ([nodeID] integer primary key, [name] text, [info] text)"
+        sql = "create table " + table_name + " ([nodeID] integer , [name] text primary key, [info] text)"
 
         c.execute(sql)
         conn.commit()
@@ -37,11 +37,11 @@ def get_info_by_name(userID, name):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         table_name = 'USER_' + userID
-        sql = "select info from " + table_name + " where name = '" + name + "'"
+        sql = "select * from " + table_name + " where name = '" + name + "'"
         res = c.execute(sql)
-        ans = ''
+        ans = tuple()
         for item in res:
-            ans = item[0]
+            ans = (item[0], item[2])
         conn.commit()
         conn.close()
         return ans

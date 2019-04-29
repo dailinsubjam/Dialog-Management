@@ -64,9 +64,16 @@ def get_import_node():
 
     info = []
     for item in name:
-        info.append(database.get_info_by_name('0', item))
+        item_info = database.get_info_by_name('0', item)
+        item_id = item_info[0]
+        item_inf = item_info[1]
+        item_info = json.loads(item_inf)
+        item_info['nodeID'] = item_id
+        info.append(item_info)
     print(info)
-    return json.dumps(info)
+    data = {}
+    data['info'] = info
+    return json.dumps(data)
 
 
 

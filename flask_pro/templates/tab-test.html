@@ -26,11 +26,134 @@
     <link rel="stylesheet" href="/static/css/jquery-ui.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/mdui.min.css">
+    <style type="text/css">
+        .talk_con {
+            width: 600px;
+            height: 500px;
+            border: 1px solid #666;
+            margin: 50px auto 0;
+            background: #f9f9f9;
+        }
+
+        .talk_show {
+            width: 580px;
+            height: 420px;
+            border: 1px solid #666;
+            background: #fff;
+            margin: 10px auto 0;
+            overflow: auto;
+        }
+
+        .talk_input {
+            width: 580px;
+            margin: 10px auto 0;
+        }
+
+        .whotalk {
+            width: 80px;
+            height: 30px;
+            float: left;
+            outline: none;
+        }
+
+        .talk_word {
+            width: 420px;
+            height: 26px;
+            padding: 0px;
+            float: left;
+            margin-left: 10px;
+            outline: none;
+            text-indent: 10px;
+        }
+
+        .talk_sub {
+            width: 56px;
+            height: 30px;
+            float: left;
+            margin-left: 10px;
+        }
+
+        .atalk {
+            margin: 10px;
+        }
+
+        .atalk span {
+            display: inline-block;
+            background: #0181cc;
+            border-radius: 10px;
+            color: #fff;
+            padding: 5px 10px;
+        }
+
+        .btalk {
+            margin: 10px;
+            text-align: right;
+        }
+
+        .btalk span {
+            display: inline-block;
+            background: #ef8201;
+            border-radius: 10px;
+            color: #fff;
+            padding: 5px 10px;
+        }
+    </style>
 
 </head>
 
 <body>
+    <script type="text/javascript">
+        // 
+        window.onload = function () {
+            var Words = document.getElementById("words");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
 
+
+            TalkSub.onclick = function () {
+                //定义空字符串
+                var str = "";
+                if (TalkWords.value == "") {
+                    // 消息为空时弹窗
+                    alert("消息不能为空");
+                    return;
+                }
+
+                str = '<div class="btalk"><span>' + TalkWords.value + '</span></div>';
+                Words.innerHTML = Words.innerHTML + str;
+
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/main/chat",
+                    data: {
+                        'data': JSON.stringify(TalkWords.value)
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        if (result.resultCode == 200) {
+                            alert("SUCCESS");
+                        }
+                        ;
+                    },
+                });
+                TalkWords.value = "";
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "/main/chat",
+                    success: function (data) {
+                        str = '<div class="atalk"><span>' + data + '</span></div>';
+                        Words.innerHTML = Words.innerHTML + str;
+                    },
+                });
+            }
+
+        }
+
+
+    </script>
 
     <!-- the initial page -->
     <div id="initial">
@@ -40,12 +163,129 @@
             <button class="tablinks" onclick="openDiv(event, 'diagram')" id="defaultOpen">Canvas</button>
             <button class="tablinks" onclick="openDiv(event, 'intent')">Intent Registration</button>
             <button class="tablinks" onclick="openDiv(event, 'test')">Test</button>
+            <button class="tablinks" onclick="openDiv(event, 'import')">Import Node</button>
+
         </div>
 
 
         <!-- canvas div -->
         <div id="diagram" class="tabcontent" style="background-color: #dae4e4;float: left;">
         </div>
+
+        <div id="test" class="talk_con tabcontent">
+            <div class="talk_show" id="words">
+                <div class="atalk"><span id="asay">吃饭了吗？</span></div>
+                <div class="btalk"><span id="bsay">还没呢，你呢？</span></div>
+            </div>
+            <div class="talk_input">
+                <input type="text" class="talk_word" id="talkwords">
+                <input type="button" value="发送" class="talk_sub" id="talksub">
+            </div>
+        </div>
+
+
+        <div id='import' class="tabcontent">
+            <form action="##" method="POST">
+                <table id="import-node">
+                    <thead>
+                        <tr>
+                            <th>Node Name</th>
+                        </tr>
+                    </thead>
+                    <tbody id="import-node-body">
+
+                    </tbody>
+                </table>
+                <input type="button" value="add" onclick="addImportNode()">
+
+            </form>
+            <input type="button" value="submit" onclick="subImpNode()">
+        </div>
+        <script>
+            function addImportNode() {
+                var tbObj = document.getElementById("import-node-body");
+                var trObj = document.createElement("tr");
+                trObj.id = new Date().getTime() + 5;
+                trObj.innerHTML = '<td><input type="text" name="node-name"/></td>\
+                                    <td><input type="button" value="delete" onclick="delImportNode(this)"></td>'
+                tbObj.appendChild(trObj);
+            }
+
+            function delImportNode(obj) {
+                var trID = obj.parentNode.parentNode.id;
+                var trObj = document.getElementById(trID);
+                document.getElementById("import-node-body").removeChild(trObj);
+            }
+
+            function subImpNode() {
+                // alert(1);
+                var node_Objects = [];
+                $('#import-node-body tr').each(function (index, item) {
+                    var $item = $(item);
+                    node_Objects.push(
+                        $item.find("td input[name='node-name']").val()
+                    );
+                }
+                );
+
+                var atomID = 0;
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "/main/import",
+                    data: {
+                        'data': JSON.stringify(node_Objects)
+                    },
+                    success: function (data) {
+
+                        data['info'].forEach((item) => {
+                            atomID = Math.max(atomID, Number(item['nodeID']));
+                            // alert(JSON.stringify(item));
+                            var adddata = {
+                                key: item['nodeID'],
+                                ID: "ID:" + item['nodeID'],
+                                category: item['nodeType'],
+                            };
+                            linkRecord[item['nodeID']] = new Array();
+
+                            myModel.addNodeData(adddata);
+                            part = myDiagram.findPartForData(adddata);  // must be same data reference, not a new {}
+                            // set location to saved mouseDownPoint in ContextMenuTool
+                            part.location = myDiagram.toolManager.contextMenuTool.mouseDownPoint;
+                            let link = {
+                                "from": item['nodeID'],
+                                "to": item["NextState"],
+                            };
+
+                            var nodeStart = myDiagram.findNodeForKey(link["from"]);
+                            var nodeEnd = myDiagram.findNodeForKey(link["to"]);
+
+                            if (nodeEnd == null) {
+
+                                let tmp = linkRecord[link['from']].indexOf(link['to']);
+                                if (tmp == -1) {
+                                    myModel.addLinkData(link);
+                                    linkRecord[link['from']].push(link['to']);
+                                }
+
+                            }
+                            else {
+                                var res;
+                                res = nodeStart.findLinksTo(nodeEnd);
+                                if (res.count == 0) {
+                                    myDiagram.model.addLinkData(link);
+                                }
+                            }
+
+                        });
+
+
+
+                    },
+                });
+            }
+        </script>
 
     </div>
 
