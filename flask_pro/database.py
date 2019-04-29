@@ -7,7 +7,7 @@ def create_table(userID):
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         table_name = 'USER_' + userID
-        sql = "create table " + table_name + " ([nodeID] integer primary key, [info] text)"
+        sql = "create table " + table_name + " ([nodeID] integer primary key, [name] text, [info] text)"
 
         c.execute(sql)
         conn.commit()
@@ -16,7 +16,7 @@ def create_table(userID):
         pass
 
 
-def get_info(userID, nodeID):
+def get_info_by_ID(userID, nodeID):
     try:
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
@@ -31,19 +31,36 @@ def get_info(userID, nodeID):
         return ans
     except:
         return 0
-
-
-def insert_and_update(userID, nodeID, info):
+    
+def get_info_by_name(userID, name):
     try:
         conn = sqlite3.connect("database.db")
         c = conn.cursor()
         table_name = 'USER_' + userID
-        sql = 'replace into ' + table_name + ' (nodeID, info) values (?, ?)'
-        c.execute(sql, (nodeID, info))
+        sql = "select info from " + table_name + " where name = '" + name + "'"
+        res = c.execute(sql)
+        ans = ''
+        for item in res:
+            ans = item[0]
+        conn.commit()
+        conn.close()
+        return ans
+    except:
+        return 0
+
+
+def insert_and_update(userID, nodeID, name, info):
+    try:
+        conn = sqlite3.connect("database.db")
+        c = conn.cursor()
+        table_name = 'USER_' + userID
+        sql = 'replace into ' + table_name + ' (nodeID, info, name) values (?, ?, ?)'
+        c.execute(sql, (nodeID, info, name))
         conn.commit()
         conn.close()
     except:
         pass
+
 
 def delete_table(userID):
     try:
@@ -76,4 +93,5 @@ def make_json_file(userID):
 if __name__ == '__main__':
     # delete_table('0')
     # create_table('0')
-    make_json_file('0')
+    # make_json_file('0')
+    print(get_info_by_name('0','buy'))

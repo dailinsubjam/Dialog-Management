@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/static/js/jquery-1.9.1.js"></script>
+</head>
+
+<body>
+    <div>
+        <form action="##" method="POST">
+            <table id="import-node">
+                <thead>
+                    <tr>
+                        <th>Node Name</th>
+                    </tr>
+                </thead>
+                <tbody id="import-node-body">
+
+                </tbody>
+            </table>
+            <input type="button" value="add" onclick="addImportNode()">
+            
+        </form>
+        <input type="button" value="submit" onclick="subImpNode()">
+    </div>
+    <script>
+        function addImportNode() {
+            var tbObj = document.getElementById("import-node-body");
+            var trObj = document.createElement("tr");
+            trObj.id = new Date().getTime() + 5;
+            trObj.innerHTML = '<td><input type="text" name="node-name"/></td>\
+                            <td><input type="button" value="delete" onclick="delImportNode(this)"></td>'
+            tbObj.appendChild(trObj);
+        }
+
+        function delImportNode(obj) {
+            var trID = obj.parentNode.parentNode.id;
+            var trObj = document.getElementById(trID);
+            document.getElementById("import-node-body").removeChild(trObj);
+        }
+
+        function subImpNode() {
+            // alert(1);
+            var node_Objects = [];
+            $('#import-node-body tr').each(function (index, item) {
+                var $item = $(item);
+                node_Objects.push(
+                    $item.find("td input[name='node-name']").val()
+                );
+            }
+            );
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/main/import",
+                data: {
+                    'data': JSON.stringify(node_Objects)
+                },
+                success: function (data) {
+                    
+                },
+            });
+        }
+    </script>
+</body>
+
+</html>

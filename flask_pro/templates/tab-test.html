@@ -273,56 +273,7 @@
                     data: { "nodeID": curNode },
                     dataType: 'json',
                     success: function (data) {
-                        let data1 = data['global'];
-                        let data2 = data['local'];
-                        let data4 = data['logic'];
-
-                        let ele1 = document.getElementById('tb');
-                        let ele2 = document.getElementById('tb2');
-                        let ele4 = document.getElementById('tb4');
-
-                        ele1.innerHTML = '';
-                        ele2.innerHTML = '';
-                        ele4.innerHTML = '';
-                        if ('name' in data) {
-                            document.getElementById('tab0name').value = data['name'];
-                        }
-                        else document.getElementById('tab0name').value = "";
-
-                        for (var i = 0; i < data1.length; i++) {
-                            let trObj = document.createElement("tr");
-                            trObj.id = new Date().getTime();
-                            item = data1[i];
-                            trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
-                                '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
-                                '<td><input type="button" value="delete" onclick="Del1(this)"></td>';
-                            ele1.appendChild(trObj);
-                        }
-
-                        for (var i = 0; i < data2.length; i++) {
-                            let trObj = document.createElement("tr");
-                            trObj.id = new Date().getTime() + 1;
-                            item = data2[i];
-                            trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
-                                '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
-                                '<td><input type="button" value="delete" onclick="Del2(this)"></td>';
-                            ele2.appendChild(trObj);
-                        }
-
-
-
-                        for (var i = 0; i < data4.length; i++) {
-                            let trObj = document.createElement("tr");
-                            trObj.id = new Date().getTime() + 3;
-                            item = data4[i];
-                            trObj.innerHTML = '<td><input type="text" name="Priority" value="' + item['Priority'] + '"/></td>' +
-                                '<td><input type="text" name="Condition" value="' + item['Condition'] + '"/></td>' +
-                                '<td><input type="text" name="Operation" value="' + item['Operation'] + '"/></td>' +
-                                '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
-                                '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
-                                '<td><input type="button" value="delete" onclick="Del4(this)"></td>';
-                            ele4.appendChild(trObj);
-                        }
+                        makeNode(data);
                     },
                 });
 
@@ -331,7 +282,58 @@
             }, "Edit");
         }
 
+        function makeNode(data) {
+            let data1 = data['global'];
+            let data2 = data['local'];
+            let data4 = data['logic'];
 
+            let ele1 = document.getElementById('tb');
+            let ele2 = document.getElementById('tb2');
+            let ele4 = document.getElementById('tb4');
+
+            ele1.innerHTML = '';
+            ele2.innerHTML = '';
+            ele4.innerHTML = '';
+            if ('name' in data) {
+                document.getElementById('tab0name').value = data['name'];
+            }
+            else document.getElementById('tab0name').value = "";
+
+            for (var i = 0; i < data1.length; i++) {
+                let trObj = document.createElement("tr");
+                trObj.id = new Date().getTime();
+                item = data1[i];
+                trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
+                    '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
+                    '<td><input type="button" value="delete" onclick="Del1(this)"></td>';
+                ele1.appendChild(trObj);
+            }
+
+            for (var i = 0; i < data2.length; i++) {
+                let trObj = document.createElement("tr");
+                trObj.id = new Date().getTime() + 1;
+                item = data2[i];
+                trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
+                    '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
+                    '<td><input type="button" value="delete" onclick="Del2(this)"></td>';
+                ele2.appendChild(trObj);
+            }
+
+
+
+            for (var i = 0; i < data4.length; i++) {
+                let trObj = document.createElement("tr");
+                trObj.id = new Date().getTime() + 3;
+                item = data4[i];
+                trObj.innerHTML = '<td><input type="text" name="Priority" value="' + item['Priority'] + '"/></td>' +
+                    '<td><input type="text" name="Condition" value="' + item['Condition'] + '"/></td>' +
+                    '<td><input type="text" name="Operation" value="' + item['Operation'] + '"/></td>' +
+                    '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
+                    '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
+                    '<td><input type="button" value="delete" onclick="Del4(this)"></td>';
+                ele4.appendChild(trObj);
+            }
+        }
 
 
         // start node

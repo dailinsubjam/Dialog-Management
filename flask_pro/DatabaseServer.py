@@ -6,6 +6,12 @@ app = Flask(__name__)
 
 testInfo = {}
 
+INPUT = ''
+
+
+def reply():
+    return "hello"
+
 
 @app.route('/main/form', methods=['POST'])  # 路由
 def form_submmit():
@@ -21,17 +27,28 @@ def form_submmit():
     info['logic'] = data['logic']
     print(nodeID)
     print(json.dumps(info))
-    database.insert_and_update(userID, nodeID, json.dumps(info))
+    database.insert_and_update(userID, nodeID, info['Name'], json.dumps(info))
     print("send successfully!")
 
     return "OK"
+
+
+@app.route('/main/chat', methods=['GET','POST'])
+def chat():
+    if request.method == 'POST':
+        INPUT = json.loads(request.form.get('data'))
+        print(INPUT)
+        return "OK"
+    else:
+        ans = reply()
+        return json.dumps(ans)
 
 
 @app.route('/database/search', methods=['GET'])
 def init_form():
     data = {}
     nodeID, userID = request.args.get('nodeID'), '0'
-    ans = database.get_info(userID, nodeID)
+    ans = database.get_info_by_ID(userID, nodeID)
     if ans:
         info = json.loads(ans)
         data['name'] = info['Name']
@@ -41,9 +58,26 @@ def init_form():
     return json.dumps(data)
 
 
+@app.route('/main/import', methods=['GET'])
+def get_import_node():
+    name = json.loads(request.args.get('data'))
+
+    info = []
+    for item in name:
+        info.append(database.get_info_by_name('0', item))
+    print(info)
+    return json.dumps(info)
+
+
+
 @app.route('/main')
 def main_page():
     return render_template('tab-test.html')
+
+
+@app.route('/chat')
+def test_chat():
+    return render_template('chat-test.html')
 
 
 @app.route('/index')
@@ -54,6 +88,10 @@ def index():
 @app.route('/form-test')
 def form_test():
     return render_template('form-test.html')
+
+@app.route('/import-test')
+def import_test():
+    return render_template('import-test.html')
 
 
 if __name__ == "__main__":
