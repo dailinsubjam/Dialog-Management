@@ -1,6 +1,6 @@
 import json
 
-result = 'from fsm import *\n' + 'def contain(s1, s2):\n' + '\treturn (s1 in s2)\n' + 'def equal(x1, x2):\n' + '\treturn x1 == x2\n'
+result = 'from fsm import *\n' + 'def contain(s1, s2):\n' + '\treturn (s1 in s2)\n' + 'def equal(x1, x2):\n' + '\treturn x1 == x2\n' + 'def not_equal(x1, x2):\n' + '\treturn x1 != x2\n'
 main_part = ''
 initial_state_part = ''
 declaration_part = ''
@@ -8,7 +8,7 @@ transitions = []
 transitions_part = ''
 middle_part = ''
 
-f = open("json.json", 'r')
+f = open("json_LightSwitch.json", 'r')
 input = json.load(f)
 
 def DeclareVariable(dict_variable, num_tab):
@@ -43,6 +43,8 @@ def logic_analyzing(begin_str, logic, num_tab):
                 cur_condition_str += 'contain(\''+dict_condition[key]+'\', message)'
             elif key == 'equal':
                 cur_condition_str += 'equal'+dict_condition[key]
+            elif key == 'not_equal':
+                cur_condition_str += 'not_equal' + dict_condition[key]
             condition_str += cur_condition_str
     condition_str += ":\n"
     content_str = ''
@@ -60,6 +62,8 @@ def logic_analyzing(begin_str, logic, num_tab):
     #output
     for i in range(num_tab + 1):
         content_str += '\t'
+    output_str = logic["output"]
+    # [i.start() for i in re.finditer('\\\\', output_str]
     content_str += 'print' + logic["output"] + '\n'
     #next_state
     for i in range(num_tab + 1):
@@ -73,13 +77,13 @@ for dict in input:
 
     if (not general_environment):
         general_environment = True
-        task = dict["task"]
+        task = 'TASK'
         dict_variable = dict["Variable"]
-        declaration_part +=  '\tdef __init__(self, *args, **kwargs):\n\t\tsuper('+ str(dict["task"]) + ', self).__init__(*args, **kwargs)\n'
+        declaration_part +=  '\tdef __init__(self, *args, **kwargs):\n\t\tsuper('+ task + ', self).__init__(*args, **kwargs)\n'
         declaration_part += DeclareVariable(dict_variable, 2)
-        name = 'class ' + str(dict["task"]) + '(FiniteStateMachine):\n'
+        name = 'class ' + task + '(FiniteStateMachine):\n'
         result += name
-        main_part += ('dm = ' + str(dict["task"]) + '()\n')
+        main_part += ('dm = ' + task + '()\n')
         main_part += 'f = open("input.txt", "r")\nfor line in f:\n\tinput_line = line[:-1]\n\tdm.on_message(input_line)\n'
         middle_part += '\tdef on_message(self, message):\n\t\tprint(self.__state__)\n'
     else:
@@ -128,3 +132,5 @@ result += middle_part
 result += main_part
 f = open("result.py", "w")
 f.write(result)
+
+

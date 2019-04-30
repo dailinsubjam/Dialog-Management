@@ -1,0 +1,92 @@
+[{
+	"imported_node": [ ],
+	"Variable": {
+			"electricity": true,
+			"indicator": "off"
+	}
+},
+{
+	"ID": 0,
+	"name": "off",
+	"type": "atom-start",
+	"Variable": {
+	},
+	"logic": [
+			{
+				"condition": [{"contain": "turn on"}, {"equal": "(self.electricity, True)"}],
+				"operation": [{"assign": "(self.indicator, 'lit') "}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "on"
+		       },
+		       {
+				"condition": [{"contain": "turn off"}],
+				"operation": [{"assign": "(self.indicator, 'dim') "}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "off"
+		       },
+		       {
+				"condition": [{"contain": "broken"}],
+				"operation": [{"assign": "(self.indicator, 'broken')"},{"assign": "(self.electricity, False)"}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
+		      }
+
+	]
+},
+	{
+	"ID": 1,
+	"name": "on",
+	"type": "atom",
+	"Variable": {
+	},
+	"logic": [
+			{
+				"condition": [{"contain": "turn on"}, {"equal": "(self.electricity, True)"}],
+				"operation": [{"assign": "(self.indicator, 'lit') "}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "on"
+		       },
+		       {
+				"condition": [{"contain": "turn off"}],
+				"operation": [{"assign": "(self.indicator, 'dim') "}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "off"
+		       },
+		       {
+				"condition": [{"contain": "broken"}],
+				"operation": [{"assign": "(self.indicator, 'broken')"},{"assign": "(self.electricity, False)"}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
+		      }
+
+	]
+},
+	{
+	"ID": 2,
+	"name": "broken",
+	"type": "atom",
+	"Variable": {
+	},
+	"logic": [
+			{
+				"condition": [{"contain": "turn on"}],
+				"operation": [],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
+		       },
+		       {
+				"condition": [{"contain": "turn off"}],
+				"operation": [],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
+		       },
+		       {
+				"condition": [{"contain": "broken"}],
+				"operation": [{"assign": "(self.indicator, 'broken')"},{"assign": "(self.electricity, False)"}],
+				"output": " 'The light is  ' + self.indicator",
+				"nextState": "broken"
+		      }
+
+	]
+}
+]
