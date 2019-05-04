@@ -146,12 +146,57 @@
                     success: function (data) {
                         str = '<div class="atalk"><span>' + data + '</span></div>';
                         Words.innerHTML = Words.innerHTML + str;
+                        Words.scrollTop = Words.scrollHeight;
                     },
                 });
+
             }
 
         }
 
+        function Click() {
+            var Words = document.getElementById("words");
+            var TalkWords = document.getElementById("talkwords");
+            var TalkSub = document.getElementById("talksub");
+            var str = "";
+            if (TalkWords.value == "") {
+                // 消息为空时弹窗
+                alert("消息不能为空");
+                return;
+            }
+
+            str = '<div class="btalk"><span>' + TalkWords.value + '</span></div>';
+            Words.innerHTML = Words.innerHTML + str;
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/main/chat",
+                data: {
+                    'data': JSON.stringify(TalkWords.value)
+                },
+                success: function (result) {
+                    console.log(result);
+                    if (result.resultCode == 200) {
+                        alert("SUCCESS");
+                    }
+                    ;
+                },
+            });
+            TalkWords.value = "";
+
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/main/chat",
+                success: function (data) {
+                    str = '<div class="atalk"><span>' + data + '</span></div>';
+                    Words.innerHTML = Words.innerHTML + str;
+                    Words.scrollTop = Words.scrollHeight;
+                },
+            });
+
+        }
 
     </script>
 
@@ -171,17 +216,121 @@
         <!-- canvas div -->
         <div id="diagram" class="tabcontent" style="background-color: #dae4e4;float: left;">
         </div>
+        <div id="test" class="tabcontent">
+            <div class="talk_con ">
+                <div class="talk_show" id="words">
+                    <div class="atalk"><span id="asay">吃饭了吗？</span></div>
+                    <div class="btalk"><span id="bsay">还没呢，你呢？</span></div>
+                </div>
+                <div class="talk_input">
+                    <input type="text" class="talk_word" id="talkwords" onkeyup=" if(event.keyCode==13) {Click(); }">
+                    <input type="button" value="发送" class="talk_sub" id="talksub">
+                </div>
 
-        <div id="test" class="talk_con tabcontent">
-            <div class="talk_show" id="words">
-                <div class="atalk"><span id="asay">吃饭了吗？</span></div>
-                <div class="btalk"><span id="bsay">还没呢，你呢？</span></div>
             </div>
-            <div class="talk_input">
-                <input type="text" class="talk_word" id="talkwords">
-                <input type="button" value="发送" class="talk_sub" id="talksub">
-            </div>
+            <script>
+                function send1(words) {
+                    var Words = document.getElementById("words");
+                    var TalkWords = document.getElementById("talkwords");
+                    var TalkSub = document.getElementById("talksub");
+                    var str = "";
+
+
+                    str = '<div class="btalk"><span>' + words + '</span></div>';
+                    Words.innerHTML = Words.innerHTML + str;
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "/main/chat",
+                        data: {
+                            'data': JSON.stringify(TalkWords.value)
+                        },
+                        success: function (result) {
+                            console.log(result);
+                            if (result.resultCode == 200) {
+                                alert("SUCCESS");
+                            }
+                            ;
+                        },
+                    });
+
+
+                    $.ajax({
+                        type: "GET",
+                        dataType: "json",
+                        url: "/main/chat",
+                        success: function (data) {
+                            str = '<div class="atalk"><span>' + data + '</span></div>';
+                            Words.innerHTML = Words.innerHTML + str;
+                            Words.scrollTop = Words.scrollHeight;
+                        },
+                    });
+
+                }
+
+
+                function send2() {
+                    var Words = document.getElementById("words");
+                    var TalkWords = document.getElementById("talkwords");
+                    var TalkSub = document.getElementById("talksub");
+                    var str = "";
+
+                    let fruit_type = document.getElementById('fruit').value;
+                    let weight = document.getElementById("weight").value;
+                    let unit_price = document.getElementById("unit price").value;
+                    words = "buy(type='fruit', fruit_type='" + fruit_type + "',weight='" + weight + "',unit price='" + unit_price + "')"
+                    str = '<div class="btalk"><span>' + words + '</span></div>';
+                    Words.innerHTML = Words.innerHTML + str;
+
+                    $.ajax({
+                        type: "POST",
+                        dataType: "json",
+                        url: "/main/chat",
+                        data: {
+                            'data': JSON.stringify(TalkWords.value)
+                        },
+                        success: function (result) {
+                            console.log(result);
+                            if (result.resultCode == 200) {
+                                alert("SUCCESS");
+                            }
+                            ;
+                        },
+                    });
+
+
+                    $.ajax({
+                        type: "GET",
+                        dataType: "json",
+                        url: "/main/chat",
+                        success: function (data) {
+                            str = '<div class="atalk"><span>' + data + '</span></div>';
+                            Words.innerHTML = Words.innerHTML + str;
+                            Words.scrollTop = Words.scrollHeight;
+                        },
+                    });
+
+                }
+            </script>
+            <a href="#" class="button blue bigrounded" onclick="send1('buy(type=\'fruit\')')">buy fruit</a>
+            <form id="fruit_form" action="###">
+                <label for="fruit">Fruit:</label>
+                <input type="text" id="fruit" name="fruit">
+                <label for="weight">Weight:</label>
+                <input type="text" id="weight" name="weight">
+                <label for="unit price">Unit Price:</label>
+                <input type="text" id="unit price" name="unit price">
+
+                <button type="submit" class="button blue bigrounded" onclick="send2()">select</button>
+            </form>
+            <a href="#" class="button blue bigrounded">2</a>
+            <a href="#" class="button blue bigrounded">3</a>
+            <a href="#" class="button blue bigrounded">4</a>
+
+
         </div>
+
 
 
         <div id='import' class="tabcontent">
