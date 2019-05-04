@@ -228,7 +228,6 @@
                 }
                 );
 
-                var atomID = 0;
 
                 $.ajax({
                     type: "GET",
@@ -249,7 +248,7 @@
                             };
                             linkRecord[item['nodeID']] = new Array();
 
-                            myModel.addNodeData(adddata);
+                            myDiagram.model.addNodeData(adddata);
                             part = myDiagram.findPartForData(adddata);  // must be same data reference, not a new {}
                             // set location to saved mouseDownPoint in ContextMenuTool
                             part.location = myDiagram.toolManager.contextMenuTool.mouseDownPoint;

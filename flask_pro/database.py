@@ -82,10 +82,31 @@ def make_json_file(userID):
     sql = 'select * from ' + table_name
     res = c.execute(sql)
     data = []
+    globalVar = dict()
+    globalVar['Variable'] = dict()
+    data.append(globalVar)
     for item in res:
-        tmp = json.loads(item[1])
-        tmp["ID"] = item[0]
-        data.append(tmp)
+        ID = item[0]
+        name = item[1]
+        info = json.loads(item[2])
+        cur = dict()
+        cur['ID'] = int(ID)
+        cur['name'] = name
+        cur['type'] = info['nodeType']
+        cur['Variable'] = info['local']
+        for var in info['global']:
+            data[0]['Variable'][var['Variable']] = var['Value']
+        tmp = info['logic']
+        tmp.sort(key=lambda x: str(x['Priority']))
+        cur['logic'] = []
+        temp = dict()
+        for lo in tmp:
+            temp['condition'] = lo['Condition']
+            temp['operation'] = lo['Operation']
+            temp['output'] = lo['Action']
+            temp['nextState'] = lo['NextState']
+            cur['logic'].append(temp)
+        data.append(cur)
     with open("mid_result.json", 'w') as f:
         json.dump(data, f)
 
@@ -93,5 +114,4 @@ def make_json_file(userID):
 if __name__ == '__main__':
     # delete_table('0')
     # create_table('0')
-    # make_json_file('0')
-    print(get_info_by_name('0','buy'))
+    make_json_file('0')
