@@ -1,3 +1,5 @@
-turn on
-turn off
-broken
+I want to buy some fruit...
+I want an apple
+I want a banana
+How much should I pay?
+Paid.

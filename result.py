@@ -1,66 +1,45 @@
 from fsm import *
-def contain(s1, s2):
-	return (s1 in s2)
-def equal(x1, x2):
-	return x1 == x2
-class LightSwitch(FiniteStateMachine):
-	initial_state = 'off'
+from SLU import *
+class TASK(FiniteStateMachine):
+	initial_state = '0'
 	transitions = [
-	('off', 'off'),
-	('off', 'broken'),
-	('on', 'broken'),
-	('on', 'off'),
-	('broken', 'broken'),
-	('off', 'on'),
-	('on', 'on')
+	('0', '1'),
+	('1', '1'),
+	('1', '2'),
+	('2', '3')
 	]
 	def __init__(self, *args, **kwargs):
-		super(LightSwitch, self).__init__(*args, **kwargs)
-		self.electricity = True
-		self.indicator = 'off'
+		super(TASK, self).__init__(*args, **kwargs)
+		self.cnt = 0
+		self.pay_state = False
 	def on_message(self, message):
-		print(self.__state__)
-		if self.__state__ == 'off':
-			if contain('turn on', message) and equal(self.electricity, True):
-				self.indicator =  'lit'
-				print 'The light is  ' + self.indicator
-				self.transition(to='on', event=message)
-			elif contain('turn off', message):
-				self.indicator =  'dim'
-				print 'The light is  ' + self.indicator
-				self.transition(to='off', event=message)
-			elif contain('broken', message):
-				self.indicator =  'broken'
-				self.electricity =  False
-				print 'The light is  ' + self.indicator
-				self.transition(to='broken', event=message)
-		elif self.__state__ == 'on':
-			if contain('turn on', message) and equal(self.electricity, True):
-				self.indicator =  'lit'
-				print 'The light is  ' + self.indicator
-				self.transition(to='on', event=message)
-			elif contain('turn off', message):
-				self.indicator =  'dim'
-				print 'The light is  ' + self.indicator
-				self.transition(to='off', event=message)
-			elif contain('broken', message):
-				self.indicator =  'broken'
-				self.electricity =  False
-				print 'The light is  ' + self.indicator
-				self.transition(to='broken', event=message)
-		elif self.__state__ == 'broken':
-			if contain('turn on', message):
-				print 'The light is  ' + self.indicator
-				self.transition(to='broken', event=message)
-			elif contain('turn off', message):
-				print 'The light is  ' + self.indicator
-				self.transition(to='broken', event=message)
-			elif contain('broken', message):
-				self.indicator =  'broken'
-				self.electricity =  False
-				print 'The light is  ' + self.indicator
-				self.transition(to='broken', event=message)
-dm = LightSwitch()
+		slu = SLU()
+		intent = slu.analyze(message)
+		print message
+		if self.__state__ == '0':
+			if intent == 'buy fruit':
+				buy_intent = intent
+				print 'Please show your fruit information, including type, weight and unit price.'
+				self.transition(to='1', event=message)
+		elif self.__state__ == '1':
+			if intent == 'pay':
+				self.pay_state = True
+				print 'Please pay.'
+				self.transition(to='2', event=message)
+			elif True:
+				self.cnt += 1
+				print 'Please input corretly.'
+				self.transition(to='1', event=message)
+		elif self.__state__ == '2':
+			if self.pay_state == False:
+				
+				print 'Your order failed. Thanks for your application.'
+				self.transition(to='3', event=message)
+			elif self.pay_state == True:
+				
+				print 'Your order completed. Thanks for your application.'
+				self.transition(to='3', event=message)
+dm = TASK()
 f = open("input.txt", "r")
 for line in f:
 	input_line = line[:-1]

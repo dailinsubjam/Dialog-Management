@@ -1,0 +1,29 @@
+[
+  {"Variable": {"cnt": "0", "pay_state": "False"}},
+  {"ID": 0,
+    "name": "buy",
+    "type": "Start",
+    "Variable": [{"Variable": "buy_intent", "Value": ""}],
+    "logic":
+    [
+      {"condition": "intent == 'buy fruit'", "operation": "buy_intent = intent", "output": "Please show your fruit information, including type, weight and unit price.", "nextState": "1"}
+    ]
+  },
+  {"ID": 1,
+    "name": "select",
+    "type": "Slot",
+    "Variable": [{"Variable": "buy_intent", "Value": ""}, {"Variable": "order", "Value": ""}],
+    "logic":
+    [
+      {"condition": "intent == 'pay'", "operation": "self.pay_state = True", "output": "Please pay.", "nextState": "2"},
+      {"condition": "True", "operation": "self.cnt += 1", "output": "Please input corretly.", "nextState": "1"}
+    ]
+  },
+  {"ID": 2, "name": "pay", "type": "General", "Variable": [],
+    "logic":
+    [
+      {"condition": "self.pay_state == False", "operation": "", "output": "Your order failed. Thanks for your application.", "nextState": "3"},
+      {"condition": "self.pay_state == True", "operation": "", "output": "Your order completed. Thanks for your application.", "nextState": "3"}
+    ]
+  }
+]

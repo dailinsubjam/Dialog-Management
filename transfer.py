@@ -1,6 +1,6 @@
 import json
 
-result = 'from fsm import *\n' + 'def contain(s1, s2):\n' + '\treturn (s1 in s2)\n' + 'def equal(x1, x2):\n' + '\treturn x1 == x2\n' + 'def not_equal(x1, x2):\n' + '\treturn x1 != x2\n'
+result = 'from fsm import *\nfrom SLU import *\n'
 main_part = ''
 initial_state_part = ''
 declaration_part = ''
@@ -8,7 +8,7 @@ transitions = []
 transitions_part = ''
 middle_part = ''
 
-f = open("json_LightSwitch.json", 'r')
+f = open("mid_result.json", 'r')
 input = json.load(f)
 
 def DeclareVariable(dict_variable, num_tab):
@@ -16,7 +16,7 @@ def DeclareVariable(dict_variable, num_tab):
     for key in dict_variable:
         right_part = dict_variable[key]
         if isinstance(dict_variable[key], unicode):
-            right_part = "'" + right_part + "'"
+            right_part = right_part
         cur_declare_variable = ''
         for i in range(num_tab):
             cur_declare_variable += '\t'
@@ -29,26 +29,17 @@ def logic_analyzing(begin_str, logic, num_tab):
     for i in range(num_tab):
         condition_str += '\t'
     condition_str += begin_str
-    list_condition = logic["condition"]
-    k = 0
-    for dict_condition in list_condition:
-        for key in dict_condition:
-            cur_condition_str = ''
-            k += 1
-            if k != 1:
-                cur_condition_str += ' and '
-            else:
-                cur_condition_str += ' '
-            if key == 'contain':
-                cur_condition_str += 'contain(\''+dict_condition[key]+'\', message)'
-            elif key == 'equal':
-                cur_condition_str += 'equal'+dict_condition[key]
-            elif key == 'not_equal':
-                cur_condition_str += 'not_equal' + dict_condition[key]
-            condition_str += cur_condition_str
+    if logic["condition"] == "":
+        condition_str += ' True'
+    else:
+        condition_str += ' ' + logic["condition"]
     condition_str += ":\n"
     content_str = ''
-    list_operation = logic["operation"]
+    str_operation = logic["operation"]
+    for i in range(num_tab + 1):
+        content_str += '\t'
+    content_str += str_operation + '\n'
+    '''
     for dict_operation in list_operation:
         for key in dict_operation:
             if key == 'assign':
@@ -59,12 +50,14 @@ def logic_analyzing(begin_str, logic, num_tab):
                 assign_right = tuple[tuple.find(',') + 1:tuple.find(')')]
                 content_str += assign_left+' = '+assign_right
                 content_str += '\n'
+    '''
     #output
     for i in range(num_tab + 1):
         content_str += '\t'
-    output_str = logic["output"]
-    # [i.start() for i in re.finditer('\\\\', output_str]
-    content_str += 'print' + logic["output"] + '\n'
+    #TODO
+    # output_str = logic["output"]
+    # swap_position = re.finditer('\'', output_str)
+    content_str += 'print \'' + logic["output"] + '\'\n'
     #next_state
     for i in range(num_tab + 1):
         content_str += '\t'
@@ -85,28 +78,29 @@ for dict in input:
         result += name
         main_part += ('dm = ' + task + '()\n')
         main_part += 'f = open("input.txt", "r")\nfor line in f:\n\tinput_line = line[:-1]\n\tdm.on_message(input_line)\n'
-        middle_part += '\tdef on_message(self, message):\n\t\tprint(self.__state__)\n'
+        middle_part += '\tdef on_message(self, message):\n\t\tslu = SLU()\n\t\tintent = slu.analyze(message)\n\t\tprint message\n'
     else:
         num_state += 1
         small_part = ''
         cur_type = dict["type"]
         cur_state = dict["name"]
-        if cur_type == 'atom-start':
-            initial_state_part = '\tinitial_state = \'' + cur_state + '\'\n'
+        cur_id = dict["ID"]
+        if cur_type == 'Start':
+            initial_state_part = '\tinitial_state = \'' + str(cur_id) + '\'\n'
         logics = dict["logic"]
         num_logics = len(logics)
         for i in range(num_logics):
             small_dict = logics[i]
             next_state = small_dict["nextState"]
-            transitions.append((cur_state, next_state))
+            transitions.append((str(cur_id), next_state))
             if i == 0:
                 small_part += logic_analyzing('if', small_dict, 3)
             else:
                 small_part += logic_analyzing('elif', small_dict, 3)
         if num_state == 1:
-            middle_part += '\t\tif self.__state__ == \'' + cur_state + '\':\n'
+            middle_part += '\t\tif self.__state__ == \'' + str(cur_id) + '\':\n'
         else:
-            middle_part += '\t\telif self.__state__ == \'' + cur_state + '\':\n'
+            middle_part += '\t\telif self.__state__ == \'' + str(cur_id) + '\':\n'
         if small_part == '':
             small_part = '\t\t\tpass\n'
         middle_part += small_part
