@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 import json
 import database
+from result import *
 
 app = Flask(__name__)
 
@@ -9,11 +10,9 @@ testInfo = {}
 INPUT = ''
 
 
-def reply():
-    return "hello"
 
 
-@app.route('/main/form', methods=['POST'])  # 路由
+@app.route('/main/form', methods=['POST'])
 def form_submmit():
     data = request.form.get('data')
     data = json.loads(data)
@@ -35,12 +34,13 @@ def form_submmit():
 
 @app.route('/main/chat', methods=['GET','POST'])
 def chat():
+    global INPUT
     if request.method == 'POST':
         INPUT = json.loads(request.form.get('data'))
-        print(INPUT)
+        # print(INPUT)
         return "OK"
     else:
-        ans = reply()
+        ans = reply(INPUT)
         return json.dumps(ans)
 
 
@@ -102,4 +102,7 @@ def import_test():
 
 
 if __name__ == "__main__":
+    from signal import signal, SIGPIPE, SIG_DFL, SIG_IGN
+
+    signal(SIGPIPE, SIG_IGN)
     app.run(debug=True)

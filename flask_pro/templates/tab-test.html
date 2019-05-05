@@ -67,10 +67,10 @@
         }
 
         .talk_sub {
-            width: 56px;
+            /* width: 56px;
             height: 30px;
-            float: left;
-            margin-left: 10px;
+            float: left; */
+            margin-left: 20px;
         }
 
         .atalk {
@@ -219,12 +219,12 @@
         <div id="test" class="tabcontent">
             <div class="talk_con ">
                 <div class="talk_show" id="words">
-                    <div class="atalk"><span id="asay">吃饭了吗？</span></div>
-                    <div class="btalk"><span id="bsay">还没呢，你呢？</span></div>
+                    <!-- <div class="atalk"><span id="asay">吃饭了吗？</span></div>
+                    <div class="btalk"><span id="bsay">还没呢，你呢？</span></div> -->
                 </div>
                 <div class="talk_input">
                     <input type="text" class="talk_word" id="talkwords" onkeyup=" if(event.keyCode==13) {Click(); }">
-                    <input type="button" value="发送" class="talk_sub" id="talksub">
+                    <input type="button" value="send" class="talk_sub button blue bigrounded" id="talksub">
                 </div>
 
             </div>
@@ -244,7 +244,7 @@
                         dataType: "json",
                         url: "/main/chat",
                         data: {
-                            'data': JSON.stringify(TalkWords.value)
+                            'data': JSON.stringify(words)
                         },
                         success: function (result) {
                             console.log(result);
@@ -278,8 +278,12 @@
 
                     let fruit_type = document.getElementById('fruit').value;
                     let weight = document.getElementById("weight").value;
-                    let unit_price = document.getElementById("unit price").value;
-                    words = "buy(type='fruit', fruit_type='" + fruit_type + "',weight='" + weight + "',unit price='" + unit_price + "')"
+                    let unit_price = document.getElementById("unit_price").value;
+                    let words = ""; 
+                    if(fruit_type != "") words += "buy(fruit_type=" + fruit_type;
+                    if(weight != "") words += ",weight=" + weight;
+                    if(unit_price != "") words += ",unit_price=" + unit_price
+                    words += ")"
                     str = '<div class="btalk"><span>' + words + '</span></div>';
                     Words.innerHTML = Words.innerHTML + str;
 
@@ -288,7 +292,7 @@
                         dataType: "json",
                         url: "/main/chat",
                         data: {
-                            'data': JSON.stringify(TalkWords.value)
+                            'data': JSON.stringify(words)
                         },
                         success: function (result) {
                             console.log(result);
@@ -313,20 +317,20 @@
 
                 }
             </script>
-            <a href="#" class="button blue bigrounded" onclick="send1('I want to buy some fruit.')">buy fruit</a>
+            <a href="#" class="button blue bigrounded" onclick="send1('buy(type=fruit)')">buy fruit</a>
             <form id="fruit_form" action="###">
                 <label for="fruit">Fruit:</label>
                 <input type="text" id="fruit" name="fruit">
                 <label for="weight">Weight:</label>
                 <input type="text" id="weight" name="weight">
-                <label for="unit price">Unit Price:</label>
-                <input type="text" id="unit price" name="unit price">
+                <label for="unit_price">Unit Price:</label>
+                <input type="text" id="unit_price" name="unit price">
 
-                <button type="submit" class="button blue bigrounded" onclick="send2()">select</button>
+                <button type="button" class="button blue bigrounded" onclick="send2()">select</button>
             </form>
-            <a href="#" class="button blue bigrounded">2</a>
-            <a href="#" class="button blue bigrounded">3</a>
-            <a href="#" class="button blue bigrounded">4</a>
+            <a href="#" class="button blue bigrounded" onclick="send1('pay(state=True)')">pay</a>
+            <!-- <a href="#" class="button blue bigrounded">3</a>
+            <a href="#" class="button blue bigrounded">4</a> -->
 
 
         </div>
@@ -345,10 +349,10 @@
 
                     </tbody>
                 </table>
-                <input type="button" value="add" onclick="addImportNode()">
+                <input type="button" value="add" class="button blue bigrounded" onclick="addImportNode()">
 
             </form>
-            <input type="button" value="submit" onclick="subImpNode()">
+            <input type="button" value="submit" class="button blue bigrounded" onclick="subImpNode()">
         </div>
         <script>
             function addImportNode() {
@@ -356,7 +360,7 @@
                 var trObj = document.createElement("tr");
                 trObj.id = new Date().getTime() + 5;
                 trObj.innerHTML = '<td><input type="text" name="node-name"/></td>\
-                                    <td><input type="button" value="delete" onclick="delImportNode(this)"></td>'
+                                    <td><input type="button" value="delete" class="button blue bigrounded" onclick="delImportNode(this)"></td>'
                 tbObj.appendChild(trObj);
             }
 
@@ -456,7 +460,7 @@
                 <table id="table1">
                     <caption>Global Variable Table</caption>
                     <thead>
-                        <tr>
+                        <tr >
                             <th>Variable</th>
                             <th>Value</th>
                         </tr>
@@ -465,14 +469,14 @@
                         <tr id="#">
                             <td><input type="text" name="Variable" /></td>
                             <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" onclick="Del1(this)"></td>
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)"></td>
 
                         </tr>
                     </tbody>
 
 
                 </table>
-                <input type="button" value="add" onclick="Add1(this)">
+                <input type="button" value="add"  class="button blue bigrounded" onclick="Add1(this)">
             </div>
             <div id="tab2">
                 <table id="table2">
@@ -488,14 +492,14 @@
                         <tr id="##">
                             <td><input type="text" name="Variable" /></td>
                             <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" onclick="Del2(this)"></td>
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del2(this)"></td>
 
                         </tr>
                     </tbody>
 
 
                 </table>
-                <input type="button" value="add" onclick="Add2(this)">
+                <input type="button" value="add" class="button blue bigrounded" onclick="Add2(this)">
             </div>
 
             <div id="tab4">
@@ -518,17 +522,17 @@
                             <td><input type="text" name="Operation" /></td>
                             <td><input type="text" name="NextState" /></td>
                             <td><input type="text" name="Action" /></td>
-                            <td><input type="button" value="delete" onclick="Del4(this)"></td>
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del4(this)"></td>
 
                         </tr>
                     </tbody>
 
 
                 </table>
-                <input type="button" value="add" onclick="Add4(this)">
+                <input type="button" value="add" class="button blue bigrounded" onclick="Add4(this)">
             </div>
 
-            <input type="button" value="Submit" onclick="sendData()">
+            <input type="button" value="Submit" class="button blue bigrounded" onclick="sendData()">
         </form>
     </div>
 
@@ -693,7 +697,7 @@
                 item = data1[i];
                 trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
                     '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
-                    '<td><input type="button" value="delete" onclick="Del1(this)"></td>';
+                    '<td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)"></td>';
                 ele1.appendChild(trObj);
             }
 
@@ -718,7 +722,7 @@
                     '<td><input type="text" name="Operation" value="' + item['Operation'] + '"/></td>' +
                     '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
                     '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
-                    '<td><input type="button" value="delete" onclick="Del4(this)"></td>';
+                    '<td><input type="button" value="delete" class="button blue bigrounded" onclick="Del4(this)"></td>';
                 ele4.appendChild(trObj);
             }
         }
@@ -937,7 +941,7 @@
             trObj.id = new Date().getTime();
             trObj.innerHTML = '<td><input type="text" name="Variable"/></td>\
                             <td><input type="text" name="Value"/></td>\
-                            <td><input type="button" value="delete" onclick="Del1(this)"></td>'
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)"></td>'
             tbObj.appendChild(trObj);
         }
 
@@ -954,7 +958,7 @@
             trObj.id = new Date().getTime();
             trObj.innerHTML = '<td><input type="text" name="Variable" /></td>\
                             <td><input type="text" name="Value" /></td>\
-                            <td><input type="button" value="delete" onclick="Del2(this)"></td>'
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del2(this)"></td>'
             tbObj.appendChild(trObj);
         }
 
@@ -976,7 +980,7 @@
                             <td><input type="text" name="Operation" /></td>\
                             <td><input type="text" name="NextState" /></td>\
                             <td><input type="text" name="Action" /></td>\
-                            <td><input type="button" value="delete" onclick="Del4(this)"></td>'
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del4(this)"></td>'
             tbObj.appendChild(trObj);
         }
 

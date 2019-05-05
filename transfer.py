@@ -1,6 +1,7 @@
 import json
+from tool import *
 
-result = 'from fsm import *\nfrom SLU import *\n'
+result = 'from fsm import *\nfrom tool import *\n'
 main_part = ''
 initial_state_part = ''
 declaration_part = ''
@@ -35,9 +36,9 @@ def logic_analyzing(begin_str, logic, num_tab):
         condition_str += ' ' + logic["condition"]
     condition_str += ":\n"
     content_str = ''
-    str_operation = logic["operation"]
-    for i in range(num_tab + 1):
-        content_str += '\t'
+    str_operation = normalize(num_tab + 1, logic["operation"])
+    # for i in range(num_tab + 1):
+    #     content_str += '\t'
     content_str += str_operation + '\n'
     '''
     for dict_operation in list_operation:
@@ -52,16 +53,18 @@ def logic_analyzing(begin_str, logic, num_tab):
                 content_str += '\n'
     '''
     #output
-    for i in range(num_tab + 1):
-        content_str += '\t'
+    
     #TODO
     # output_str = logic["output"]
     # swap_position = re.finditer('\'', output_str)
-    content_str += 'print \'' + logic["output"] + '\'\n'
+    
     #next_state
     for i in range(num_tab + 1):
         content_str += '\t'
     content_str += 'self.transition(to=\''+logic["nextState"]+'\', event=message)\n'
+    for i in range(num_tab + 1):
+        content_str += '\t'
+    content_str += "return " + logic['output'] + "\n"
     return condition_str + content_str
 
 general_environment = False
@@ -77,8 +80,8 @@ for dict in input:
         name = 'class ' + task + '(FiniteStateMachine):\n'
         result += name
         main_part += ('dm = ' + task + '()\n')
-        main_part += 'f = open("input.txt", "r")\nfor line in f:\n\tinput_line = line[:-1]\n\tdm.on_message(input_line)\n'
-        middle_part += '\tdef on_message(self, message):\n\t\tslu = SLU()\n\t\tintent = slu.analyze(message)\n\t\tprint message\n'
+        main_part += 'def reply(IN):\n\treturn dm.on_message(IN)\n'
+        middle_part += '\tdef on_message(self, message):\n\t\tintent,slot = parse(message)\n'
     else:
         num_state += 1
         small_part = ''

@@ -57,6 +57,5 @@ class TASK(FiniteStateMachine):
 dm = TASK()
 def reply(IN):
 	return dm.on_message(IN)
-
-
-print(reply('buy(type=fruit)'))
+from signal import signal, SIGPIPE, SIG_DFL, SIG_IGN
+signal(SIGPIPE, SIG_IGN)

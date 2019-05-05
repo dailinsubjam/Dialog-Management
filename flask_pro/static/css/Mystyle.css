@@ -63,7 +63,7 @@ body {
     left:20%;
     top:20%;
     z-index:11;
-    background:#B8F764; 
+    background:#58ACFA;
 }
 
 #popLayer{
@@ -118,12 +118,7 @@ body {
     text-indent: 10px;
 }
 
-.talk_sub {
-    width: 56px;
-    height: 30px;
-    float: left;
-    margin-left: 10px;
-}
+
 
 .atalk {
     margin: 10px;
@@ -395,3 +390,13 @@ body {
 	background: -moz-linear-gradient(top,  #f171ab,  #feb1d3);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f171ab', endColorstr='#feb1d3');
 }
+
+
+
+
+
+
+
+
+
+

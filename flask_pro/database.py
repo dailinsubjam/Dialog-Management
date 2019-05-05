@@ -86,7 +86,7 @@ def make_json_file(userID):
     globalVar['Variable'] = dict()
     data.append(globalVar)
     for item in res:
-        # print(item)
+        print(item)
         ID = item[0]
         name = item[1]
         info = json.loads(item[2])
@@ -114,7 +114,7 @@ def make_json_file(userID):
 
         for i in range(len(cur['logic'])):
             cur['logic'][i] = json.loads(cur['logic'][i])
-        print(cur)
+        # print(cur)
         data.append(cur)
 
     with open("mid_result.json", 'w') as f:
