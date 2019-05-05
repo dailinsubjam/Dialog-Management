@@ -86,6 +86,7 @@ def make_json_file(userID):
     globalVar['Variable'] = dict()
     data.append(globalVar)
     for item in res:
+        # print(item)
         ID = item[0]
         name = item[1]
         info = json.loads(item[2])
@@ -97,16 +98,25 @@ def make_json_file(userID):
         for var in info['global']:
             data[0]['Variable'][var['Variable']] = var['Value']
         tmp = info['logic']
-        tmp.sort(key=lambda x: str(x['Priority']))
+
+        tmp.sort(key=lambda x: (x['Priority']))
+
         cur['logic'] = []
+
         temp = dict()
         for lo in tmp:
+            # print(lo)
             temp['condition'] = lo['Condition']
             temp['operation'] = lo['Operation']
             temp['output'] = lo['Action']
             temp['nextState'] = lo['NextState']
-            cur['logic'].append(temp)
+            cur['logic'].append(json.dumps(temp))
+
+        for i in range(len(cur['logic'])):
+            cur['logic'][i] = json.loads(cur['logic'][i])
+        print(cur)
         data.append(cur)
+
     with open("mid_result.json", 'w') as f:
         json.dump(data, f)
 

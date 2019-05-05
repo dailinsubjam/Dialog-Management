@@ -1,1 +1,82 @@
-[{"Variable": {"cnt": "0", "pay_state": "False"}}, {"ID": 0, "name": "buy", "type": "Start", "Variable": [{"Variable": "buy_intent", "Value": ""}], "logic": [{"condition": "buy_intent = intent.find('buy'); # buy_intent.slot.type==fruit", "operation": "", "output": "Please show your fruit information, including type, weight and unit price.", "nextState": "1"}]}, {"ID": 1, "name": "select", "type": "Slot", "Variable": [{"Variable": "buy_intent", "Value": ""}, {"Variable": "order", "Value": ""}], "logic": [{"condition": "", "operation": "cnt++;", "output": "Please input corretly.", "nextState": "1"}, {"condition": "", "operation": "cnt++;", "output": "Please input corretly.", "nextState": "1"}, {"condition": "", "operation": "cnt++;", "output": "Please input corretly.", "nextState": "1"}]}, {"ID": 2, "name": "pay", "type": "General", "Variable": [], "logic": [{"condition": "pay_state == False", "operation": "", "output": "Your order failed. Thanks for your application.", "nextState": "3"}, {"condition": "pay_state == False", "operation": "", "output": "Your order failed. Thanks for your application.", "nextState": "3"}]}]
+[
+    {
+        "Variable": {
+            "pay_state": "False",
+            "cnt": "0"
+        }
+    },
+    {
+        "ID": 2,
+        "name": "pay",
+        "type": "General",
+        "Variable": [],
+        "logic": [
+            {
+                "condition": "pay_state == True",
+                "operation": "order()",
+                "output": "Your order is successful. Thans for your application.",
+                "nextState": "4"
+            },
+            {
+                "condition": "pay_state == False",
+                "operation": "",
+                "output": "Your order failed. Thanks for your application.",
+                "nextState": "3"
+            }
+        ]
+    },
+    {
+        "ID": 0,
+        "name": "buy",
+        "type": "Start",
+        "Variable": [
+            {
+                "Variable": "buy_intent",
+                "Value": ""
+            }
+        ],
+        "logic": [
+            {
+                "condition": "buy_intent = intent.find('buy'); # buy_intent.slot.type==fruit",
+                "operation": "",
+                "output": "Please show your fruit information, including type, weight and unit price.",
+                "nextState": "1"
+            }
+        ]
+    },
+    {
+        "ID": 1,
+        "name": "select",
+        "type": "Slot",
+        "Variable": [
+            {
+                "Variable": "buy_intent",
+                "Value": ""
+            },
+            {
+                "Variable": "order",
+                "Value": ""
+            }
+        ],
+        "logic": [
+            {
+                "condition": "tmp=intent.find('buy'); tmp.slot.cotain(['fruit_type', 'unit_price','weight'])",
+                "operation": "order = make_order_dict({'fruit_type': apple, 'weight': 3, 'unit price': 2});",
+                "output": "This is your $order. Please pay for your order.",
+                "nextState": "2"
+            },
+            {
+                "condition": "cnt >10;",
+                "operation": "",
+                "output": "Your order failed.Thanks for your application.",
+                "nextState": "3"
+            },
+            {
+                "condition": "",
+                "operation": "cnt++;",
+                "output": "Please input corretly.",
+                "nextState": "1"
+            }
+        ]
+    }
+]
