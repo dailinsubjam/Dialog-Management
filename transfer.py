@@ -16,7 +16,8 @@ def DeclareVariable(dict_variable, num_tab):
     declare = ""
     for key in dict_variable:
         right_part = dict_variable[key]
-        if isinstance(dict_variable[key], unicode):
+        # if isinstance(dict_variable[key], unicode):
+        if isinstance(dict_variable[key], str):
             right_part = right_part
         cur_declare_variable = ''
         for i in range(num_tab):

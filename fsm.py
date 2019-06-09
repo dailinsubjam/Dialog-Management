@@ -59,7 +59,8 @@ class Action(object):
       state attribute.\n Possible values are strings.')
     else:
       function.__fsm_action_state__ = state
-    if self.kwargs.has_key('on_enter'):
+    # if self.kwargs.has_key('on_enter'):
+    if 'on_enter' in self.kwargs:
       on_enter = self.kwargs.get('on_enter')
       if type(on_enter) == types.BooleanType:
         function.__fsm_action_on_enter__ = on_enter
@@ -68,7 +69,8 @@ class Action(object):
         attribute.\n Possible values are True or False.')
     else:
       function.__fsm_action_on_enter__ = True
-    if self.kwargs.has_key('on_exit'):
+    # if self.kwargs.has_key('on_exit'):
+    if 'on_exit' in self.kwargs:
       on_exit = self.kwargs.get('on_exit')
       if type(on_exit) == types.BooleanType:
         function.__fsm_action_on_exit__ = on_exit
@@ -135,9 +137,11 @@ class FiniteStateMachine(object):
       if not transition:
         transition = dict()
         transitions.update({ end: transition })
-      if not transition.has_key('beginning_state'):
+      # if not transition.has_key('beginning_state'):
+      if 'beginning_state' not in transition:
         transition.update({ 'beginning_state': state_map.get(begin) })
-      if not transition.has_key('end_state'):
+      # if not transition.has_key('end_state'):
+      if 'end_state' not in transition:
         transition.update({ 'end_state': state_map.get(end) })
     return lookup_table
 

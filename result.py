@@ -6,16 +6,16 @@ class TASK(FiniteStateMachine):
 	('2', '3'),
 	('1', '1'),
 	('1', '2'),
-	('0', '1'),
+	('2', '4'),
 	('1', '3'),
-	('2', '4')
+	('0', '1')
 	]
 	def __init__(self, *args, **kwargs):
 		super(TASK, self).__init__(*args, **kwargs)
-		self.cnt = 0
-		self.unit_price = 0
-		self.weight = 0
 		self.fruit_type = ''
+		self.weight = 0
+		self.unit_price = 0
+		self.cnt = 0
 	def on_message(self, message):
 		intent,slot = parse(message)
 		if self.__state__ == '0':
@@ -57,6 +57,3 @@ class TASK(FiniteStateMachine):
 dm = TASK()
 def reply(IN):
 	return dm.on_message(IN)
-
-
-print(reply('buy(type=fruit)'))
