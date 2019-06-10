@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import json
 import database
+from transfer import *
+
 from result import *
 
 app = Flask(__name__)
@@ -40,6 +42,8 @@ def chat():
         # print(INPUT)
         return "OK"
     else:
+        while INPUT == '':
+            print("waiting")
         ans = reply(INPUT)
         return json.dumps(ans)
 
@@ -61,7 +65,7 @@ def init_form():
 @app.route('/main/import', methods=['GET'])
 def get_import_node():
     name = json.loads(request.args.get('data'))
-
+    print(name)
     info = []
     for item in name:
         item_info = database.get_info_by_name('0', item)
@@ -74,6 +78,18 @@ def get_import_node():
     data = {}
     data['info'] = info
     return json.dumps(data)
+
+
+@app.route('/main/compile', methods=['GET'])
+def compile():
+    name = request.args.get('data')
+    if name == 'compile':
+        database.make_json_file('0')
+        Compile()
+        print("successfully compile!")
+
+
+    return 'OK'
 
 
 

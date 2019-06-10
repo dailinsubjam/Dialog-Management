@@ -4,37 +4,26 @@ class TASK(FiniteStateMachine):
 	initial_state = '0'
 	transitions = [
 	('2', '3'),
-	('1', '1'),
 	('1', '2'),
-	('0', '1'),
 	('1', '3'),
-	('2', '4')
+	('0', '1'),
+	('2', '4'),
+	('1', '1')
 	]
 	def __init__(self, *args, **kwargs):
 		super(TASK, self).__init__(*args, **kwargs)
-		self.cnt = 0
-		self.unit_price = 0
-		self.weight = 0
 		self.fruit_type = ''
+		self.weight = 0
+		self.unit_price = 0
+		self.cnt = 0
 	def on_message(self, message):
 		intent,slot = parse(message)
 		if self.__state__ == '0':
-			if intent == 'buy' and 'type' in slot and slot['type'] == 'fruit':
+			if intent == 'buy' and 'fruit_type' in slot:
 				
 
 				self.transition(to='1', event=message)
-				return 'Please show the fruit information, including type, weight and unit price.'
-		elif self.__state__ == '2':
-			if intent == 'pay' and 'state' in slot and bool(slot['state']) == True:
-				
-
-				self.transition(to='4', event=message)
-				return 'Successful! Thanks for your application.'
-			elif True:
-				
-
-				self.transition(to='3', event=message)
-				return 'No pay. Your order failed. Thanks for your application.'
+				return 'Please show what fruit to buy.'
 		elif self.__state__ == '1':
 			if intent == 'buy' and 'fruit_type' in slot and 'weight' in slot and 'unit_price' in slot:
 				self.fruit_type = slot['fruit_type']
@@ -54,8 +43,17 @@ class TASK(FiniteStateMachine):
 
 				self.transition(to='1', event=message)
 				return 'Wrong request.Please show your order again.'
+		elif self.__state__ == '2':
+			if intent == 'pay' and 'state' in slot and bool(slot['state']) == True:
+				
+
+				self.transition(to='4', event=message)
+				return 'Successful! Thanks for your application.'
+			elif True:
+				
+
+				self.transition(to='3', event=message)
+				return 'No pay. Your order failed. Thanks for your application.'
 dm = TASK()
 def reply(IN):
 	return dm.on_message(IN)
-from signal import signal, SIGPIPE, SIG_DFL, SIG_IGN
-signal(SIGPIPE, SIG_IGN)

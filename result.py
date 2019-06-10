@@ -3,11 +3,11 @@ from tool import *
 class TASK(FiniteStateMachine):
 	initial_state = '0'
 	transitions = [
-	('2', '3'),
 	('1', '1'),
-	('1', '2'),
 	('2', '4'),
+	('2', '3'),
 	('1', '3'),
+	('1', '2'),
 	('0', '1')
 	]
 	def __init__(self, *args, **kwargs):

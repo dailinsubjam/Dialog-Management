@@ -59,7 +59,8 @@ class Action(object):
       state attribute.\n Possible values are strings.')
     else:
       function.__fsm_action_state__ = state
-    if self.kwargs.has_key('on_enter'):
+    # if self.kwargs.has_key('on_enter'):
+    if 'on_enter' in self.kwargs:
       on_enter = self.kwargs.get('on_enter')
       if type(on_enter) == types.BooleanType:
         function.__fsm_action_on_enter__ = on_enter
@@ -68,7 +69,8 @@ class Action(object):
         attribute.\n Possible values are True or False.')
     else:
       function.__fsm_action_on_enter__ = True
-    if self.kwargs.has_key('on_exit'):
+    # if self.kwargs.has_key('on_exit'):
+    if 'on_exit' in self.kwargs:
       on_exit = self.kwargs.get('on_exit')
       if type(on_exit) == types.BooleanType:
         function.__fsm_action_on_exit__ = on_exit
@@ -135,9 +137,11 @@ class FiniteStateMachine(object):
       if not transition:
         transition = dict()
         transitions.update({ end: transition })
-      if not transition.has_key('beginning_state'):
+      # if not transition.has_key('beginning_state'):
+      if 'beginning_state' not in transition:
         transition.update({ 'beginning_state': state_map.get(begin) })
-      if not transition.has_key('end_state'):
+      # if not transition.has_key('end_state'):
+      if 'end_state' not in transition:
         transition.update({ 'end_state': state_map.get(end) })
     return lookup_table
 
@@ -261,7 +265,7 @@ class FiniteStateMachine(object):
       raise FiniteStateMachineError('The transition from %s to %s is \
       invalid.' % (self.__state__, to))
     # If there are any guards lets execute those now.
-    if transition.get('end_state').has_key('guard'):
+    if 'guard' in transition.get('end_state'):
       allowed = transition.get('end_state').get('guard')()
       if not type(allowed) == types.BooleanType:
         raise FiniteStateMachineError('A guard must only return True \
@@ -270,10 +274,10 @@ class FiniteStateMachine(object):
         raise FiniteStateMachineError('A guard declined the transition \
         from %s to %s.' % (self.__state__, to))
     # Try to execute the action associated with leaving the current state.
-    if transition.get('beginning_state').has_key('on_exit'):
+    if 'on_exit' in transition.get('beginning_state'):
       transition.get('beginning_state').get('on_exit')(event)
     # Try to execute the action associated with entering the new state.
-    if transition.get('end_state').has_key('on_enter'):
+    if 'on_enter' in transition.get('end_state'):
       transition.get('end_state').get('on_enter')(event)
     # Enter the new state and we're done.
     self.__state__ = to

@@ -80,6 +80,13 @@ def make_json_file(userID):
     c = conn.cursor()
     table_name = 'USER_' + userID
     sql = 'select * from ' + table_name
+
+    # sql = 'delete from USER_0 where nodeID = 0'
+    # print(sql)
+    # c.execute(sql)
+    # conn.commit()
+    # conn.close()
+
     res = c.execute(sql)
     data = []
     globalVar = dict()

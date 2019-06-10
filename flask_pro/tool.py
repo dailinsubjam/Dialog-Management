@@ -1,15 +1,15 @@
 
 def parse(message):
-    # print(message)
+    print(message)
     intent, tmp = message.split('(')[0], message.split('(')[1][0:-1]
     slot = dict()
     tmp = tmp.strip().split(',')
-    print(tmp)
+    # print(tmp)
     for item in tmp:
         temp = item.split('=')
         if len(temp) < 2:
             continue
-        slot[item.split('=')[0].strip()] = item.split('=')[1].strip()
+        slot[temp[0].strip()] = temp[1].strip()
     return intent, slot
 
 def normalize(num, operation):

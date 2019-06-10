@@ -25,7 +25,33 @@
     <link rel="stylesheet" href="/static/css/Mystyle.css">
     <link rel="stylesheet" href="/static/css/jquery-ui.css">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/icons.css">
     <link rel="stylesheet" href="/static/css/mdui.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+    <!-- Favicon -->
+    <link rel="icon" href="/static/images/favicon.png" type="image/x-icon" />
+    <!-- Bootstrap CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate CSS -->
+    <link href="/static/vendors/animate/animate.css" rel="stylesheet">
+    <!-- Icon CSS-->
+    <link rel="stylesheet" href="/static/vendors/font-awesome/css/font-awesome.min.css">
+    <!-- Camera Slider -->
+    <link rel="stylesheet" href="/static/vendors/camera-slider/camera.css">
+    <!-- Owlcarousel CSS-->
+    <link rel="stylesheet" type="text/css" href="/static/vendors/owl_carousel/owl.carousel.css" media="all">
+
+    <!--Theme Styles CSS-->
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" media="all" />
+
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
     <style type="text/css">
         .talk_con {
             width: 600px;
@@ -203,19 +229,76 @@
     <!-- the initial page -->
     <div id="initial">
 
+        <!-- Header_Area -->
+        <nav class="navbar navbar-default header_aera" id="main_navbar">
+            <div class="container">
+                <!-- searchForm -->
+                <!-- <div class="searchForm">
+                <form action="#" class="row m0">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        <input type="search" name="search" class="form-control" placeholder="Type & Hit Enter">
+                        <span class="input-group-addon form_hide"><i class="fa fa-times"></i></span>
+                    </div>
+                </form>
+            </div>End searchForm -->
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="col-md-2 p0">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#min_navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="index.html"><img src="/static/images/logo.png" alt=""></a>
+                    </div>
+                </div>
 
-        <div class="tab">
-            <button class="tablinks" onclick="openDiv(event, 'diagram')" id="defaultOpen">Canvas</button>
-            <!-- <button class="tablinks" onclick="openDiv(event, 'intent')">Intent Registration</button> -->
-            <button class="tablinks" onclick="openDiv(event, 'test')">Test</button>
-            <button class="tablinks" onclick="openDiv(event, 'import')">Import Node</button>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="col-md-10 p0">
+                    <div class="collapse navbar-collapse" id="min_navbar">
+                        <ul class="nav navbar-nav navbar-right">
 
-        </div>
+
+                            <li><a class="tablinks" onclick="openDiv(event, 'diagram')" id="defaultOpen">Canvas</a>
+                            </li>
+                            <li><a class="tablinks" onclick="openDiv(event, 'test')">Test</a></li>
+                            <li> <a class="tablinks" onclick="openDiv(event, 'import')">Import Node</a></li>
+
+
+
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div>
+            </div><!-- /.container -->
+        </nav>
+        <!-- End Header_Area -->
+
+
 
 
         <!-- canvas div -->
-        <div id="diagram" class="tabcontent" style="background-color: #dae4e4;float: left;">
+        <div style="margin-left: 85%; position: absolute; margin-top: 40%;"><input type="button" value="Compile"
+                class="button blue bigrounded" onclick="compile()"></div>
+        <div id="diagram" class="tabcontent">
+
         </div>
+
+        <script>
+            function compile() {
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: "/main/compile",
+                    data: {
+                        'data': "compile"
+                    },
+                    
+                });
+            }
+        </script>
         <div id="test" class="tabcontent">
             <div class="talk_con ">
                 <div class="talk_show" id="words">
@@ -279,10 +362,10 @@
                     let fruit_type = document.getElementById('fruit').value;
                     let weight = document.getElementById("weight").value;
                     let unit_price = document.getElementById("unit_price").value;
-                    let words = ""; 
-                    if(fruit_type != "") words += "buy(fruit_type=" + fruit_type;
-                    if(weight != "") words += ",weight=" + weight;
-                    if(unit_price != "") words += ",unit_price=" + unit_price
+                    let words = "";
+                    if (fruit_type != "") words += "buy(fruit_type=" + fruit_type;
+                    if (weight != "") words += ",weight=" + weight;
+                    if (unit_price != "") words += ",unit_price=" + unit_price
                     words += ")"
                     str = '<div class="btalk"><span>' + words + '</span></div>';
                     Words.innerHTML = Words.innerHTML + str;
@@ -317,7 +400,7 @@
 
                 }
             </script>
-            <a href="#" class="button blue bigrounded" onclick="send1('buy(type=fruit)')">buy fruit</a>
+            <!-- <a href="#" class="button blue bigrounded" onclick="send1('buy(type=fruit)')">buy fruit</a>
             <form id="fruit_form" action="###">
                 <label for="fruit">Fruit:</label>
                 <input type="text" id="fruit" name="fruit">
@@ -328,7 +411,7 @@
 
                 <button type="button" class="button blue bigrounded" onclick="send2()">select</button>
             </form>
-            <a href="#" class="button blue bigrounded" onclick="send1('pay(state=True)')">pay</a>
+            <a href="#" class="button blue bigrounded" onclick="send1('pay(state=True)')">pay</a> -->
             <!-- <a href="#" class="button blue bigrounded">3</a>
             <a href="#" class="button blue bigrounded">4</a> -->
 
@@ -337,9 +420,23 @@
 
 
 
-        <div id='import' class="tabcontent">
+        <div id='import' class="tabcontent" style="position: absolute; margin-left: 10%;">
             <form action="##" method="POST">
-                <table id="import-node">
+                <div class="container">
+                    <h2>Import Node <div><a class="add-btn" onclick="addImportNode(this)"><i
+                                    class="css-icon-plus"></i></a></div>
+                    </h2>
+                    <ul class="responsive-table" id="import-node-body">
+                        <li class="table-header">
+                            <div class="col col-1">Node Name</div>
+                            <div class="col col-2"> Action</div>
+                        </li>
+
+                    </ul>
+                </div>
+
+
+                <!-- <table id="import-node">
                     <thead>
                         <tr>
                             <th>Node Name</th>
@@ -348,20 +445,23 @@
                     <tbody id="import-node-body">
 
                     </tbody>
-                </table>
-                <input type="button" value="add" class="button blue bigrounded" onclick="addImportNode()">
+                </table> -->
+                <!-- <input type="button" value="add" class="button blue bigrounded" onclick="addImportNode()"> -->
 
             </form>
-            <input type="button" value="submit" class="button blue bigrounded" onclick="subImpNode()">
+            <!-- <input type="button" value="submit" class="button blue bigrounded" onclick="subImpNode()"> -->
+            <div style="margin-left: 80%"><input type="button" value="Submit" class="button blue bigrounded"
+                    onclick="subImpNode()"></div>
         </div>
+
         <script>
             function addImportNode() {
-                var tbObj = document.getElementById("import-node-body");
-                var trObj = document.createElement("tr");
-                trObj.id = new Date().getTime() + 5;
-                trObj.innerHTML = '<td><input type="text" name="node-name"/></td>\
-                                    <td><input type="button" value="delete" class="button blue bigrounded" onclick="delImportNode(this)"></td>'
-                tbObj.appendChild(trObj);
+                let trObj = document.createElement("li");
+                // alert(tbObj.innerHTML);
+                trObj.id = new Date().getTime();
+                trObj.innerHTML = '<div class="col col-1" data-label="node-name" ><input type="text" name="node-name"></div>\
+                            <div class="col col-2" data-label="Action"><a class="del-btn" onclick="delImportNode(this)" ><i class="fa fa-trash"></i></a></div>';
+                document.getElementById("import-node-body").appendChild(trObj);
             }
 
             function delImportNode(obj) {
@@ -373,13 +473,15 @@
             function subImpNode() {
                 // alert(1);
                 var node_Objects = [];
-                $('#import-node-body tr').each(function (index, item) {
+                $('#import-node-body li').each(function (index, item) {
                     var $item = $(item);
                     node_Objects.push(
-                        $item.find("td input[name='node-name']").val()
+                        $item.find("div input[name='node-name']").val()
                     );
+                    // alert(item.innerHTML);
                 }
                 );
+
 
 
                 $.ajax({
@@ -387,12 +489,12 @@
                     dataType: "json",
                     url: "/main/import",
                     data: {
-                        'data': JSON.stringify(node_Objects)
+                        'data': JSON.stringify(node_Objects.slice(1))
                     },
                     success: function (data) {
 
                         data['info'].forEach((item) => {
-                            atomID = Math.max(atomID, Number(item['nodeID']));
+                            atomID = Math.max(atomID, Number(item['nodeID'])) + 1;
                             // alert(JSON.stringify(item));
                             var adddata = {
                                 key: item['nodeID'],
@@ -442,8 +544,8 @@
     </div>
 
     <!-- form div -->
-    <div id="base-form" class="basediv" style="display:none;">
-        <form id="atom-form" action="##" method="POST">
+    <div id="base-form" class="basediv" style="position: absolute; left: 10%; min-height: 600px; min-width: 80%;">
+        <form id="atom-form" method="POST">
 
             <div class="mdui-tab mdui-tab-full-width" mdui-tab>
                 <a href="#tab0" class="mdui-ripple">Name</a>
@@ -457,10 +559,10 @@
                 <input type="text" id="tab0name" />
             </div>
             <div id="tab1">
-                <table id="table1">
+                <!-- <table id="table1">
                     <caption>Global Variable Table</caption>
                     <thead>
-                        <tr >
+                        <tr>
                             <th>Variable</th>
                             <th>Value</th>
                         </tr>
@@ -469,70 +571,74 @@
                         <tr id="#">
                             <td><input type="text" name="Variable" /></td>
                             <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)"></td>
+                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)">
+                            </td>
 
                         </tr>
                     </tbody>
 
 
-                </table>
-                <input type="button" value="add"  class="button blue bigrounded" onclick="Add1(this)">
+                </table> -->
+                <div class="container">
+                    <h2>Global Variable Table <div><a class="add-btn" onclick="Add1(this)"><i
+                                    class="css-icon-plus"></i></a></div>
+                    </h2>
+                    <ul class="responsive-table" id="global-variable-ul">
+                        <li class="table-header">
+                            <div class="col col-1" name="Variable">Variable</div>
+                            <div class="col col-2" name="Value"> Value</div>
+                            <div class="col col-3"> Action</div>
+                        </li>
+
+                    </ul>
+
+                </div>
+
             </div>
             <div id="tab2">
-                <table id="table2">
-                    <caption>Local Variable Table</caption>
-                    <thead>
-                        <tr>
-                            <th>Variable</th>
-                            <th>Value</th>
+                <div class="container">
+                    <h2>Local Variable Table <div><a class="add-btn" onclick="Add2(this)"><i
+                                    class="css-icon-plus"></i></a></div>
+                    </h2>
+                    <ul class="responsive-table" id="local-variable-ul">
+                        <li class="table-header">
+                            <div class="col col-1" name="Variable">Variable</div>
+                            <div class="col col-2" name="Value"> Value</div>
+                            <div class="col col-3"> Action</div>
+                        </li>
 
-                        </tr>
-                    </thead>
-                    <tbody id="tb2">
-                        <tr id="##">
-                            <td><input type="text" name="Variable" /></td>
-                            <td><input type="text" name="Value" /></td>
-                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del2(this)"></td>
+                    </ul>
 
-                        </tr>
-                    </tbody>
+                </div>
 
-
-                </table>
-                <input type="button" value="add" class="button blue bigrounded" onclick="Add2(this)">
             </div>
 
             <div id="tab4">
-                <table id="table4">
-                    <caption>Logic Table</caption>
-                    <thead>
-                        <tr>
-                            <th>Priority</th>
-                            <th>Condition</th>
-                            <th>Operation</th>
-                            <th>NextState</th>
-                            <th>Action</th>
 
-                        </tr>
-                    </thead>
-                    <tbody id="tb4">
-                        <tr id="####">
-                            <td><input type="text" name="Priority" /></td>
-                            <td><input type="text" name="Condition" /></td>
-                            <td><input type="text" name="Operation" /></td>
-                            <td><input type="text" name="NextState" /></td>
-                            <td><input type="text" name="Action" /></td>
-                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del4(this)"></td>
+                <div class="container">
+                    <h2>Logic Table <div><a class="add-btn" onclick="Add4(this)"><i class="css-icon-plus"></i></a></div>
+                    </h2>
+                    <ul class="responsive-table" id="logic-ul">
+                        <li class="table-header">
+                            <div class="col col-1" name="Priority">Priority</div>
+                            <div class="col col-2" name="Condition"> Condition</div>
+                            <div class="col col-3" name="Operation"> Operation</div>
+                            <div class="col col-4" name="NextState">NextState</div>
+                            <div class="col col-5" name="Action">Output</div>
+                            <div class="col col-6"> Action</div>
+                        </li>
 
-                        </tr>
-                    </tbody>
+                    </ul>
+
+                </div>
 
 
-                </table>
-                <input type="button" value="add" class="button blue bigrounded" onclick="Add4(this)">
+
+
             </div>
 
-            <input type="button" value="Submit" class="button blue bigrounded" onclick="sendData()">
+            <div style="margin-left: 80%"><input type="button" value="Submit" class="button blue bigrounded"
+                    onclick="sendData()"></div>
         </form>
     </div>
 
@@ -679,51 +785,66 @@
             let data2 = data['local'];
             let data4 = data['logic'];
 
-            let ele1 = document.getElementById('tb');
-            let ele2 = document.getElementById('tb2');
-            let ele4 = document.getElementById('tb4');
+            let ele1 = document.getElementById('global-variable-ul');
+            let ele2 = document.getElementById('local-variable-ul');
+            let ele4 = document.getElementById('logic-ul');
 
-            ele1.innerHTML = '';
-            ele2.innerHTML = '';
-            ele4.innerHTML = '';
+            ele1.innerHTML = '<li class="table-header">\
+                            <div class="col col-1" name="Variable">Variable</div>\
+                            <div class="col col-2" name="Value"> Value</div>\
+                            <div class="col col-3"> Action</div>\
+                        </li>';
+            ele2.innerHTML = '<li class="table-header">\
+                                    <div class="col col-1" name="Variable">Variable</div>\
+                                    <div class="col col-2" name="Value"> Value</div>\
+                                    <div class="col col-3"> Action</div>\
+                                </li>';
+            ele4.innerHTML = ' <li class="table-header">\
+                                    <div class="col col-1" name="Priority">Priority</div>\
+                                    <div class="col col-2" name="Condition"> Condition</div>\
+                                    <div class="col col-3" name="Operation"> Operation</div>\
+                                    <div class="col col-4" name="NextState">NextState</div>\
+                                    <div class="col col-5" name="Action">Output</div>\
+                                    <div class="col col-6"> Action</div>\
+                                </li>';
             if ('name' in data) {
                 document.getElementById('tab0name').value = data['name'];
             }
             else document.getElementById('tab0name').value = "";
 
             for (var i = 0; i < data1.length; i++) {
-                let trObj = document.createElement("tr");
-                trObj.id = new Date().getTime();
-                item = data1[i];
-                trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
-                    '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
-                    '<td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)"></td>';
-                ele1.appendChild(trObj);
+                let id = new Date().getTime() + 1 + i;
+                let item = data1[i];
+                ele1.innerHTML += '<li class="table-row" ' + 'id="' + id + '">\
+                            <div class="col col-1" data-label="Variable" ><input type="text" name="Variable" value="' + item['Variable'] + '"></div>\
+                            <div class="col col-2" data-label="Value" ><input type="text" name="Value" value="' + item['Value'] + '"></div>\
+                            <div class="col col-3" data-label="Action"><a class="del-btn" onclick="Del1(this)" ><i class="fa fa-trash"></i></a></div>\
+                        </li>';
             }
 
             for (var i = 0; i < data2.length; i++) {
-                let trObj = document.createElement("tr");
-                trObj.id = new Date().getTime() + 1;
-                item = data2[i];
-                trObj.innerHTML = '<td><input type="text" name="Variable" value="' + item['Variable'] + '"/></td>' +
-                    '<td><input type="text" name="Value" value="' + item['Value'] + '"/></td>' +
-                    '<td><input type="button" value="delete" onclick="Del2(this)"></td>';
-                ele2.appendChild(trObj);
+                let id = new Date().getTime() + 2 + i;
+                let item = data2[i];
+                ele2.innerHTML += '<li class="table-row" ' + 'id="' + id + '">\
+                            <div class="col col-1" data-label="Variable" ><input type="text" name="Variable" value="' + item['Variable'] + '"></div>\
+                            <div class="col col-2" data-label="Value" ><input type="text" name="Value" value="' + item['Value'] + '"></div>\
+                            <div class="col col-3" data-label="Action"><a class="del-btn" onclick="Del2(this)" ><i class="fa fa-trash"></i></a></div>\
+                        </li>';
             }
 
 
 
             for (var i = 0; i < data4.length; i++) {
-                let trObj = document.createElement("tr");
-                trObj.id = new Date().getTime() + 3;
-                item = data4[i];
-                trObj.innerHTML = '<td><input type="text" name="Priority" value="' + item['Priority'] + '"/></td>' +
-                    '<td><input type="text" name="Condition" value="' + item['Condition'] + '"/></td>' +
-                    '<td><input type="text" name="Operation" value="' + item['Operation'] + '"/></td>' +
-                    '<td><input type="text" name="NextState" value="' + item['NextState'] + '"/></td>' +
-                    '<td><input type="text" name="Action" value="' + item['Action'] + '"/></td>' +
-                    '<td><input type="button" value="delete" class="button blue bigrounded" onclick="Del4(this)"></td>';
-                ele4.appendChild(trObj);
+                let id = new Date().getTime() + 3 + i;
+                let item = data4[i];
+                ele4.innerHTML += '<li class="table-row" ' + 'id="' + id + '">\
+                                    <div class="col col-1" data-label="Priority" ><input type="text" name="Priority" value="' + item['Priority'] + '"></div>\
+                                    <div class="col col-2" data-label="Condition" > <textarea name="Condition">'+ item['Condition'] + '</textarea></div>\
+                                    <div class="col col-3" data-label="Operation" > <textarea name="Operation">'+ item['Operation'] + '</textarea></div>\
+                                    <div class="col col-4" data-label="NextState" ><input type="text" name="NextState" value="'+ item['NextState'] + '"></div>\
+                                    <div class="col col-5" data-label="Action" ><textarea name="Action">'+ item['Action'] + '</textarea></div>\
+                                    <div class="col col-6" data-label="action"> <a class="del-btn" onclick="Del4(this)" ><i class="fa fa-trash"></i></a></div>\
+                                </li>';
             }
         }
 
@@ -931,57 +1052,54 @@
         function Del1(obj) {
             var trID = obj.parentNode.parentNode.id;
             var trObj = document.getElementById(trID);
-            document.getElementById("tb").removeChild(trObj);
+            document.getElementById("global-variable-ul").removeChild(trObj);
         }
 
 
         function Add1() {
-            var tbObj = document.getElementById("tb");
-            var trObj = document.createElement("tr");
+            var trObj = document.createElement("li");
             trObj.id = new Date().getTime();
-            trObj.innerHTML = '<td><input type="text" name="Variable"/></td>\
-                            <td><input type="text" name="Value"/></td>\
-                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del1(this)"></td>'
-            tbObj.appendChild(trObj);
+            // alert(ulObj.innerHTML);
+            trObj.innerHTML = '<div class="col col-1" data-label="Variable" ><input type="text" name="Variable"></div>\
+                            <div class="col col-2" data-label="Value" ><input type="text" name="Value"></div>\
+                            <div class="col col-3" data-label="Action"><a class="del-btn" onclick="Del1(this)" ><i class="fa fa-trash"></i></a></div>';
+            document.getElementById("global-variable-ul").appendChild(trObj);
         }
 
         function Del2(obj) {
             var trID = obj.parentNode.parentNode.id;
             var trObj = document.getElementById(trID);
-            document.getElementById("tb2").removeChild(trObj);
+            document.getElementById("local-variable-ul").removeChild(trObj);
         }
 
 
         function Add2() {
-            var tbObj = document.getElementById("tb2");
-            var trObj = document.createElement("tr");
+            var trObj = document.createElement("li");
             trObj.id = new Date().getTime();
-            trObj.innerHTML = '<td><input type="text" name="Variable" /></td>\
-                            <td><input type="text" name="Value" /></td>\
-                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del2(this)"></td>'
-            tbObj.appendChild(trObj);
+            trObj.innerHTML = '<div class="col col-1" data-label="Variable" ><input type="text" name="Variable"></div>\
+                            <div class="col col-2" data-label="Value" ><input type="text" name="Value"></div>\
+                            <div class="col col-3" data-label="Action"><a class="del-btn" onclick="Del2(this)" ><i class="fa fa-trash"></i></a></div>';
+            document.getElementById("local-variable-ul").appendChild(trObj);
         }
-
 
 
         function Del4(obj) {
             var trID = obj.parentNode.parentNode.id;
             var trObj = document.getElementById(trID);
-            document.getElementById("tb4").removeChild(trObj);
+            document.getElementById("logic-ul").removeChild(trObj);
         }
 
 
         function Add4() {
-            var tbObj = document.getElementById("tb4");
-            var trObj = document.createElement("tr");
+            var trObj = document.createElement("li");
             trObj.id = new Date().getTime();
-            trObj.innerHTML = '<td><input type="text" name="Priority" /></td>\
-                            <td><input type="text" name="Condition" /></td>\
-                            <td><input type="text" name="Operation" /></td>\
-                            <td><input type="text" name="NextState" /></td>\
-                            <td><input type="text" name="Action" /></td>\
-                            <td><input type="button" value="delete" class="button blue bigrounded" onclick="Del4(this)"></td>'
-            tbObj.appendChild(trObj);
+            trObj.innerHTML = '<div class="col col-1" data-label="Priority" ><input type="text" name="Priority"></div>\
+                                    <div class="col col-2" data-label="Condition" > <textarea name="Condition"></textarea></div>\
+                                    <div class="col col-3" data-label="Operation" > <textarea name="Operation"></textarea></div>\
+                                    <div class="col col-4" data-label="NextState" ><input type="text" name="NextState"></div>\
+                                    <div class="col col-5" data-label="Action" ><textarea name="Action"></textarea></div>\
+                                    <div class="col col-6" data-label="action"> <a class="del-btn" onclick="Del4(this)" ><i class="fa fa-trash"></i></a></div>';
+            document.getElementById("logic-ul").appendChild(trObj);
         }
 
         function sendData() {
@@ -993,35 +1111,36 @@
 
 
             var tab1_Objects = [];
-            $('#tb tr').each(function (index, item) {
+            $('#global-variable-ul li.table-row').each(function (index, item) {
                 var $item = $(item);
                 tab1_Objects.push({
-                    Variable: $item.find("td input[name='Variable']").val(),
-                    Value: $item.find("td input[name='Value']").val(),
+                    Variable: $item.find("div input[name='Variable']").val(),
+                    Value: $item.find("div input[name='Value']").val(),
                 });
             }
             );
 
             var tab2_Objects = [];
-            $('#tb2 tr').each(function (index, item) {
+            $('#local-variable-ul li.table-row').each(function (index, item) {
                 let $item = $(item);
                 tab2_Objects.push({
-                    Variable: $item.find("td input[name='Variable']").val(),
-                    Value: $item.find("td input[name='Value']").val(),
+                    Variable: $item.find("div input[name='Variable']").val(),
+                    Value: $item.find("div input[name='Value']").val(),
                 });
+
             }
             );
 
 
             var tab4_Objects = [];
-            $('#tb4 tr').each(function (index, item) {
+            $('#logic-ul li.table-row').each(function (index, item) {
                 let $item = $(item);
                 tab4_Objects.push({
-                    Priority: $item.find("td input[name='Priority']").val(),
-                    Condition: $item.find("td input[name='Condition']").val(),
-                    Operation: $item.find("td input[name='Operation']").val(),
-                    NextState: $item.find("td input[name='NextState']").val(),
-                    Action: $item.find("td input[name='Action']").val(),
+                    Priority: $item.find("div input[name='Priority']").val(),
+                    Condition: $item.find("div textarea[name='Condition']").val(),
+                    Operation: $item.find("div textarea[name='Operation']").val(),
+                    NextState: $item.find("div input[name='NextState']").val(),
+                    Action: $item.find("div textarea[name='Action']").val(),
                 });
             }
             );
@@ -1083,6 +1202,10 @@
 
         }
     </script>
+
+
+
+
 
 </body>
 
